@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ANN Benchmark Report</title>
+<style>
+@page { size: A4; margin: 11mm 12mm 11mm 12mm; }
+body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 8.6pt; line-height: 1.32; color: #111; background: #fff; margin: 0; }
+h1 { font-size: 13pt; margin: 0 0 1mm 0; }
+h2 { font-size: 10pt; margin: 2.6mm 0 1mm 0; border-bottom: 0.6px solid #999; padding-bottom: 0.5mm; }
+p { margin: 0.8mm 0; text-align: justify; }
+.sub { color: #444; font-size: 8pt; margin-bottom: 1.5mm; }
+table.tbl { border-collapse: collapse; font-size: 7.3pt; margin: 1mm 0 1.4mm 0; width: 100%; }
+table.tbl th, table.tbl td { border-bottom: 0.4px solid #ccc; padding: 0.4mm 1.2mm; text-align: left; vertical-align: top; }
+table.tbl th { border-bottom: 0.8px solid #555; font-weight: 600; background: #f4f4f2; }
+figure { margin: 1mm 0; text-align: center; }
+figure img { width: 100%; }
+figcaption { font-size: 7.6pt; color: #333; text-align: left; margin-top: 0.5mm; }
+.banner { background: #fde8d8; padding: 2mm; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>Benchmarking Approximate Nearest Neighbour Search</h1>
+<div class="sub">CS4.406 Assignment 3. Machine: {{num:env_CPU}}, {{num:env_RAM}} RAM, {{num:env_OS}}; Python {{num:env_Python}}, faiss-cpu {{num:env_faiss-cpu}}, numpy {{num:env_numpy}}.</div>
+
+<h2>1. Exact baseline</h2>
+{{table:part1_exact}}
+
+<h2>2. Three indexes</h2>
+<figure><img src="{{fig:part2_recall_vs_qps_both.png}}"></figure>
+{{table:part2_qps_at_recall}}
+{{table:part2_build_cost}}
+{{table:part2_ivfpq_ceiling}}
+
+<h2>3. Query difficulty</h2>
+<figure><img src="{{fig:part3_glove_query_difficulty.png}}"></figure>
+{{table:part3_bins}}
+{{table:part3_effort}}
+
+<h2>4. Drift</h2>
+<figure><img src="{{fig:part4_drift.png}}"></figure>
+{{table:part4_compact}}
+</body>
+</html>
