@@ -170,11 +170,11 @@ def main():
                     set_search_param(index, fam, v)
                     faiss.cvar.hnsw_stats.reset()
                     faiss.cvar.indexIVF_stats.reset()
-                    ids, qps, lat, faults = time_single_queries(index, q["test"], k, cfg["repeats"], cfg["warmup"])
-                    n_searches = min(cfg["warmup"], n_test) + cfg["repeats"] * n_test
+                    ids, qps, lat, faults = time_single_queries(index, q["test"], k, cfg["p4_repeats"], cfg["warmup"])
+                    n_searches = min(cfg["warmup"], n_test) + cfg["p4_repeats"] * n_test
                     ndis = faiss.cvar.hnsw_stats.ndis if fam == "HNSW" else faiss.cvar.indexIVF_stats.ndis
                     r = recall_at_k(remap(ids, id_map), *gt["test"], k)
-                    out.add(split="test", search_value=v, n_queries=n_test, repeats=cfg["repeats"], notes=label,
+                    out.add(split="test", search_value=v, n_queries=n_test, repeats=cfg["p4_repeats"], notes=label,
                             dist_comps_per_query=ndis / n_searches, page_faults_per_query=faults,
                             **common, **recall_summary(r),
                             **timing_summary(qps, lat))

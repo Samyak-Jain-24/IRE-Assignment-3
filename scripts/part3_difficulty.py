@@ -174,6 +174,14 @@ def main():
     fig.tight_layout()
     fig.savefig(P["figures"] / "part3_glove_query_difficulty.png")
     plt.close(fig)
+    # Reference point: relative contrast of the SIFT test queries (same definition), to compare difficulty.
+    del ds
+    sift = load_dataset("sift", P["data"], cfg["n_base"])
+    gt_s = np.load(P["work"] / "gt_sift.npz")
+    rc_sift = mean_distances(sift.queries[test_idx], sift.base) / np.sqrt(gt_s["dists"][test_idx, k - 1])
+    numbers.update({"p3_sift_rc_median": float(np.median(rc_sift)), "p3_sift_rc_p25": float(np.percentile(rc_sift, 25)),
+                    "p3_glove_test_rc_median": float(np.median(rc[test_idx])),
+                    "p3_glove_test_rc_p25": float(np.percentile(rc[test_idx], 25))})
     save_numbers(P["tables"] / "report_numbers.json", numbers)
     print("[part3] done:", json.dumps({kk: (round(v, 4) if isinstance(v, float) else v) for kk, v in numbers.items()}))
 

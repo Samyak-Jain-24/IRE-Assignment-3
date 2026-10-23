@@ -19,7 +19,8 @@ from annbench.report_utils import write_table
 from annbench.results import COLUMNS, save_numbers, timing_summary
 from annbench.timing import call_overhead
 
-PARTS = ["part1_sift.csv", "part1_glove.csv", "part2_sift.csv", "part2_glove.csv", "part3_glove.csv", "part4_drift.csv"]
+PARTS = ["part1_sift.csv", "part1_glove.csv", "part2_sift.csv", "part2_glove.csv", "part3_glove.csv", "part4_drift.csv",
+         "part4_hnsw_order.csv"]
 
 
 def cpu_name() -> str:

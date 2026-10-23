@@ -47,6 +47,9 @@ step "Part 3: query difficulty on GloVe"
 step "Part 4: drift experiment on synthetic data"
 "$PY" scripts/part4_drift.py $QUICK
 
+step "Part 4 follow-up: HNSW insertion order (post hoc diagnostic)"
+"$PY" scripts/part4_hnsw_order.py $QUICK
+
 step "results.csv and environment"
 "$PY" scripts/collect_results.py $QUICK
 

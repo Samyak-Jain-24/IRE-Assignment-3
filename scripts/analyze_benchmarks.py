@@ -62,6 +62,12 @@ def part1_table(P, numbers):
             "batch/single (1 thread)": f"{b1['qps_median'] / single['qps_median']:.1f}x",
             "agreement with stored top-10": agree,
         })
+        n_base, dim = int(single["n_base"]), int(single["dim"])
+        ms = 1e3 / single["qps_median"]
+        numbers[f"p1_{ds}_single_gbps"] = n_base * dim * 4 * single["qps_median"] / 1e9   # bytes streamed per second
+        numbers[f"p1_{ds}_ms_150k"] = ms * 150_000 / n_base                               # brute force is linear in n
+        numbers[f"p1_{ds}_ms_10m"] = ms * 10_000_000 / n_base
+        numbers[f"p1_{ds}_gib_10m"] = 10_000_000 * dim * 4 / 2**30
         numbers[f"p1_{ds}_batch_over_single"] = b1["qps_median"] / single["qps_median"]
         numbers[f"p1_{ds}_batchmax_over_single"] = bn["qps_median"] / single["qps_median"]
     if rows:
@@ -172,7 +178,12 @@ def main():
                 "Index size (MiB)": f"{row['index_bytes'] / 2**20:,.1f}",
                 "Bytes/vector": f"{row['bytes_per_vector']:.1f}",
             })
+            for bp, g in fam_df.groupby("build_params"):
+                key = "".join(ch for ch in bp.split(",nbits")[0] if ch.isalnum())
+                numbers[f"p2_{ds}_{short(fam)}_{key}_bpv"] = float(g["bytes_per_vector"].iloc[0])
+                numbers[f"p2_{ds}_{short(fam)}_{key}_build_s"] = float(g["build_time_s"].iloc[0])
             tag = f"p2_{ds}_{short(fam)}"
+            numbers[f"{tag}_gib_10m"] = float(row["bytes_per_vector"]) * 10_000_000 / 2**30
             numbers[f"{tag}_build_s"] = float(row["build_time_s"])
             numbers[f"{tag}_size_mib"] = float(row["index_bytes"] / 2**20)
             numbers[f"{tag}_bpv"] = float(row["bytes_per_vector"])

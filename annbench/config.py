@@ -66,6 +66,7 @@ FULL = {
     "p4_hnsw_efC": 100,
     "p4_pq_m": 16,
     "p4_deltas": [0.0, 0.25, 0.5, 1.0, 2.0],
+    "p4_repeats": 7,              # Part 4 passes are short (~0.1 s), so take the median of 7, not 3
 }
 
 QUICK = dict(FULL)
