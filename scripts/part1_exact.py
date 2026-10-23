@@ -85,7 +85,7 @@ def main():
     flat = faiss.IndexFlatL2(d)
     flat.add(ds.base)
     build_time = time.perf_counter() - t0
-    size = index_size_bytes(flat, P["work"])
+    size = index_size_bytes(flat)
 
     # Ground truth for all 10,000 queries (exact search, float64-refined, depth GT_K).
     t0 = time.perf_counter()

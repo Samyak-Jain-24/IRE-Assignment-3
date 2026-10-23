@@ -121,7 +121,7 @@ def main():
         for variant in ("stale", "rebuilt"):
             for fam in FAMILIES:
                 index, id_map, info = build(fam, variant, data, cfg, config.SEED)
-                size = index_size_bytes(index, P["work"])
+                size = index_size_bytes(index)
                 mech = {}
                 if fam != "HNSW":
                     sizes = ivf_list_sizes(index)

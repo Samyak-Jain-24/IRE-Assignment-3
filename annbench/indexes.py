@@ -1,6 +1,5 @@
 """Building the FAISS indexes, setting their search parameter and measuring their size."""
 import os
-import tempfile
 import time
 
 import faiss
@@ -77,15 +76,22 @@ def set_search_param(index, family: str, value: int) -> None:
         raise ValueError(family)
 
 
-def index_size_bytes(index, work_dir) -> int:
-    """Size of the serialised index on disk (vectors/codes + graph/lists + quantizer)."""
-    fd, path = tempfile.mkstemp(suffix=".faissindex", dir=work_dir)
-    os.close(fd)
-    try:
-        faiss.write_index(index, path)
-        return os.path.getsize(path)
-    finally:
-        os.remove(path)
+def index_size_bytes(index) -> int:
+    """Size of the serialised index (vectors/codes + graph/lists + quantizer), in bytes.
+
+    The bytes are only counted, never stored: writing a large index to a temporary file made
+    the OS file cache push the freshly built index out of RAM on this 8 GB machine, which
+    slowed down the first timed searches.
+    """
+    total = [0]
+
+    def count(buf):
+        total[0] += len(buf)
+
+    writer = faiss.PyCallbackIOWriter(count)
+    faiss.write_index(index, writer)
+    del writer
+    return total[0]
 
 
 def extra_ram_bytes(index) -> int:

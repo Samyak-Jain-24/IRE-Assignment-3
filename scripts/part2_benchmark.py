@@ -52,12 +52,16 @@ class Sweeper:
     def run(self, index, family, build_params, info, grid):
         cfg, k = self.cfg, config.K
         n = len(self.ds.base)
-        size = index_size_bytes(index, self.P["work"])
+        size = index_size_bytes(index)
         build_cols = dict(index=family, build_params=build_params, search_param=SEARCH_PARAM[family],
                           build_time_s=info["train_time_s"] + info["add_time_s"], train_time_s=info["train_time_s"],
                           add_time_s=info["add_time_s"], index_bytes=size, bytes_per_vector=size / n)
         print(f"[part2] {self.ds.name} {family} {build_params}: build {build_cols['build_time_s']:.1f}s, "
               f"{size / 2**20:.1f} MiB", flush=True)
+        # untimed warm-up: one multi-threaded pass over all queries so the index is resident in RAM
+        set_search_param(index, family, grid[0])
+        faiss.omp_set_num_threads(build_threads())
+        index.search(np.vstack([self.q["tune"], self.q["test"]]), k)
         history = []
         for value in grid:
             set_search_param(index, family, value)
