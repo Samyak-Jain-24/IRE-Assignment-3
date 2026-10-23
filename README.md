@@ -46,6 +46,9 @@ their own:
 
 Add `--quick` to any step to work on the quick subset.
 
+`python scripts/make_submission.py <rollnumber>` packages `../<rollnumber>_A3.zip` with exactly
+`report.pdf`, `code/` (including `.git`), `results/results.csv`, `results/figures/` and `ai_log/`.
+
 ## Method in brief
 
 * **Distances.** GloVe vectors (and queries) are L2-normalised, and every index uses Euclidean
