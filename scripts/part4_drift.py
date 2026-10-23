@@ -29,9 +29,13 @@ from annbench.indexes import (SEARCH_PARAM, build_ivf_flat, build_ivf_pq, build_
                               ivf_list_sizes, set_search_param, train_coarse_quantizer)
 from annbench.metrics import ground_truth, recall_at_k
 from annbench.report_utils import FAMILIES, STYLE, setup_matplotlib, write_table
-from annbench.results import RowWriter, recall_summary, save_numbers, timing_summary
+from annbench.results import RowWriter, add_cpu_calibration_row, recall_summary, save_numbers, timing_summary
 from annbench.synth import D, make_drift_data
 from annbench.timing import time_single_queries
+
+from annbench.memory import pin_working_set
+
+pin_working_set(3 << 30)      # keep the index resident while timing (see annbench/memory.py)
 
 TARGET = 0.95
 
@@ -103,6 +107,7 @@ def main():
                     mode=cfg["mode"], n_base=n_total, dim=D, k=k, build_threads=build_threads(), search_threads=1)
     fixed = {}
     summary = []
+    print(f"[part4] CPU calibration: {add_cpu_calibration_row(out):.0f} QPS", flush=True)
 
     for delta in cfg["p4_deltas"]:
         data = make_drift_data(delta, cfg["p4_n_old"], cfg["p4_n_new"], n_tune + n_test, config.SEED)
@@ -140,7 +145,7 @@ def main():
                 tune_curve = []
                 for v in grids[fam]:
                     set_search_param(index, fam, v)
-                    ids, qps, lat = time_single_queries(index, q["tune"], k, cfg["tune_repeats"], cfg["warmup"])
+                    ids, qps, lat, _ = time_single_queries(index, q["tune"], k, cfg["tune_repeats"], cfg["warmup"])
                     r = recall_at_k(remap(ids, id_map), *gt["tune"], k)
                     tune_curve.append((v, r.mean()))
                     out.add(split="tune", search_value=v, n_queries=n_tune, repeats=cfg["tune_repeats"], notes="sweep",
@@ -165,12 +170,13 @@ def main():
                     set_search_param(index, fam, v)
                     faiss.cvar.hnsw_stats.reset()
                     faiss.cvar.indexIVF_stats.reset()
-                    ids, qps, lat = time_single_queries(index, q["test"], k, cfg["repeats"], cfg["warmup"])
+                    ids, qps, lat, faults = time_single_queries(index, q["test"], k, cfg["repeats"], cfg["warmup"])
                     n_searches = min(cfg["warmup"], n_test) + cfg["repeats"] * n_test
                     ndis = faiss.cvar.hnsw_stats.ndis if fam == "HNSW" else faiss.cvar.indexIVF_stats.ndis
                     r = recall_at_k(remap(ids, id_map), *gt["test"], k)
                     out.add(split="test", search_value=v, n_queries=n_test, repeats=cfg["repeats"], notes=label,
-                            dist_comps_per_query=ndis / n_searches, **common, **recall_summary(r),
+                            dist_comps_per_query=ndis / n_searches, page_faults_per_query=faults,
+                            **common, **recall_summary(r),
                             **timing_summary(qps, lat))
                     res[label] = {"value": v, "recall": float(r.mean()), "qps": float(np.median(qps)),
                                   "dist_comps": ndis / n_searches}

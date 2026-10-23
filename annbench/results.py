@@ -12,7 +12,7 @@ COLUMNS = [
     "recall_at_10", "recall_p10", "frac_recall_below_0.8",
     "qps_median", "qps_runs", "latency_ms_mean", "latency_ms_p50", "latency_ms_p99",
     "build_time_s", "train_time_s", "add_time_s", "index_bytes", "bytes_per_vector", "extra_ram_bytes",
-    "dist_comps_per_query", "max_list_size", "list_imbalance", "pq_rel_error",
+    "dist_comps_per_query", "page_faults_per_query", "max_list_size", "list_imbalance", "pq_rel_error",
     "search_threads", "build_threads", "repeats", "notes", "timestamp",
 ]
 
@@ -65,3 +65,14 @@ def save_numbers(path: Path, numbers: dict) -> None:
     current = json.loads(path.read_text()) if path.exists() else {}
     current.update(numbers)
     path.write_text(json.dumps(current, indent=1, sort_keys=True))
+
+
+def add_cpu_calibration_row(out: "RowWriter") -> float:
+    """Time the fixed calibration workload and record it (with the power state) as a row."""
+    from annbench.memory import on_ac_power
+    from annbench.timing import cpu_calibration
+    qps_runs, lat = cpu_calibration()
+    out.add(experiment="calibration_cpu", index="IndexFlatL2 (50K x 128 random)", search_param="-",
+            search_value="single", split="-", n_queries=len(lat), search_threads=1, repeats=len(qps_runs),
+            **timing_summary(qps_runs, lat), notes=f"fixed CPU workload; on_ac_power={on_ac_power()}")
+    return float(np.median(qps_runs))

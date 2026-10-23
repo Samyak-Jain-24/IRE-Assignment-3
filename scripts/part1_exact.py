@@ -17,8 +17,12 @@ from annbench import config
 from annbench.data import load_dataset, query_split
 from annbench.indexes import build_threads, index_size_bytes
 from annbench.metrics import exact_sq_dists, ground_truth, recall_at_k
-from annbench.results import RowWriter, recall_summary, save_numbers, timing_summary
+from annbench.results import RowWriter, add_cpu_calibration_row, recall_summary, save_numbers, timing_summary
 from annbench.timing import time_batch, time_single_queries
+
+from annbench.memory import pin_working_set
+
+pin_working_set(3 << 30)      # keep the index resident while timing (see annbench/memory.py)
 
 
 def verify_against_stored(ds, gt_ids, gt_d, k):
@@ -106,12 +110,14 @@ def main():
     # Timing on the test half.
     q_test = ds.queries[test_idx]
     q_single = q_test[:cfg["exact_single_queries"]]
-    ids, qps_runs, lat = time_single_queries(flat, q_single, k, cfg["repeats"], cfg["warmup"])
+    cal = add_cpu_calibration_row(out)
+    print(f"[part1] CPU calibration: {cal:.0f} QPS", flush=True)
+    ids, qps_runs, lat, faults = time_single_queries(flat, q_single, k, cfg["repeats"], cfg["warmup"])
     rec = recall_at_k(ids, gt_ids[test_idx][:len(q_single)], gt_d[test_idx][:len(q_single)], k)
     out.add(search_param="mode", search_value="single", split="test", n_queries=len(q_single),
             **recall_summary(rec), **timing_summary(qps_runs, lat), build_time_s=build_time,
             train_time_s=0.0, add_time_s=build_time, index_bytes=size, bytes_per_vector=size / n,
-            search_threads=1, repeats=cfg["repeats"],
+            search_threads=1, repeats=cfg["repeats"], page_faults_per_query=faults,
             notes=f"one query per call on the first {len(q_single)} test queries")
     print(f"[part1] single-query exact: median {np.median(qps_runs):.1f} QPS, recall {rec.mean():.4f}", flush=True)
     numbers[f"p1_{ds.name}_single_qps"] = float(np.median(qps_runs))

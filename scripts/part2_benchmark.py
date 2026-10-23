@@ -24,8 +24,13 @@ from annbench.data import load_dataset, query_split
 from annbench.indexes import (SEARCH_PARAM, build_hnsw, build_ivf_flat, build_ivf_pq, build_threads,
                               extra_ram_bytes, index_size_bytes, set_search_param, train_coarse_quantizer)
 from annbench.metrics import recall_at_k
-from annbench.results import RowWriter, recall_summary, timing_summary
+from annbench.memory import rss_mib
+from annbench.results import RowWriter, add_cpu_calibration_row, recall_summary, timing_summary
 from annbench.timing import time_single_queries
+
+from annbench.memory import pin_working_set
+
+pin_working_set(3 << 30)      # keep the index resident while timing (see annbench/memory.py)
 
 
 def reset_stats():
@@ -57,7 +62,7 @@ class Sweeper:
                           build_time_s=info["train_time_s"] + info["add_time_s"], train_time_s=info["train_time_s"],
                           add_time_s=info["add_time_s"], index_bytes=size, bytes_per_vector=size / n)
         print(f"[part2] {self.ds.name} {family} {build_params}: build {build_cols['build_time_s']:.1f}s, "
-              f"{size / 2**20:.1f} MiB", flush=True)
+              f"{size / 2**20:.1f} MiB (process RSS {rss_mib():.0f} MiB)", flush=True)
         # untimed warm-up: one multi-threaded pass over all queries so the index is resident in RAM
         set_search_param(index, family, grid[0])
         faiss.omp_set_num_threads(build_threads())
@@ -69,12 +74,12 @@ class Sweeper:
             for split, reps in (("tune", cfg["tune_repeats"]), ("test", cfg["repeats"])):
                 q = self.q[split]
                 reset_stats()
-                ids, qps_runs, lat = time_single_queries(index, q, k, reps, cfg["warmup"])
+                ids, qps_runs, lat, faults = time_single_queries(index, q, k, reps, cfg["warmup"])
                 n_searches = min(cfg["warmup"], len(q)) + reps * len(q)
                 rec = recall_at_k(ids, *self.gt[split], k)
                 self.out.add(split=split, n_queries=len(q), repeats=reps, **row_common,
                              **recall_summary(rec), **timing_summary(qps_runs, lat),
-                             dist_comps_per_query=dist_comps(family) / n_searches)
+                             dist_comps_per_query=dist_comps(family) / n_searches, page_faults_per_query=faults)
                 key = f"{family}|{build_params}|{value}"
                 self.perquery[f"{key}|{split}_recall"] = rec.astype(np.float32)
                 if split == "test":
@@ -82,7 +87,7 @@ class Sweeper:
                 else:
                     history.append(rec.mean())
                 print(f"    {SEARCH_PARAM[family]}={value:<5} {split}: recall {rec.mean():.4f}  "
-                      f"QPS {np.median(qps_runs):9.1f}", flush=True)
+                      f"QPS {np.median(qps_runs):9.1f}  faults/query {faults:.2f}", flush=True)
             if history[-1] >= cfg["stop_recall"]:
                 break
             if len(history) >= 3 and history[-1] - history[-2] < cfg["plateau_eps"] \
@@ -103,6 +108,7 @@ def main():
     gt = np.load(P["work"] / f"gt_{ds.name}.npz")
     assert cfg["pq_nlist"] in cfg["ivf_nlist"], "IVF-PQ reuses one of the IVF-Flat coarse quantizers"
     sw = Sweeper(ds, cfg, P, tune_idx, test_idx, gt["ids"], gt["dists"])
+    print(f"[part2] CPU calibration: {add_cpu_calibration_row(sw.out):.0f} QPS", flush=True)
     t_start = time.perf_counter()
 
     for M in cfg["hnsw_M"]:

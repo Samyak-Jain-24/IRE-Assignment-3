@@ -80,9 +80,18 @@ def main():
 
     env = environment()
     write_table(pd.DataFrame({"Item": list(env), "Value": list(env.values())}), P["tables"] / "environment")
+    cal = df[df["experiment"] == "calibration_cpu"]["qps_median"]
+    timed = df[df["experiment"].isin(["part1_exact", "part2_benchmark", "part4_drift"])]
+    faults = timed["page_faults_per_query"].dropna()
+    print(f"[collect] CPU calibration over {len(cal)} scripts: {cal.min():.0f}-{cal.max():.0f} QPS; "
+          f"max page faults per timed query {faults.max() if len(faults) else float('nan'):.3f}")
     save_numbers(P["tables"] / "report_numbers.json", {f"env_{k}": v for k, v in env.items()} |
                  {"n_result_rows": len(df),
-                  "call_overhead_us": 1e6 / float(calib["qps_median"].iloc[0])})
+                  "call_overhead_us": 1e6 / float(calib["qps_median"].iloc[0]),
+                  "cal_qps_min": float(cal.min()), "cal_qps_max": float(cal.max()),
+                  "cal_spread_pct": float(100 * (cal.max() / cal.min() - 1)) if len(cal) else None,
+                  "faults_per_query_max": float(faults.max()) if len(faults) else None,
+                  "faults_per_query_median": float(faults.median()) if len(faults) else None})
 
 
 if __name__ == "__main__":

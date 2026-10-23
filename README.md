@@ -68,6 +68,14 @@ Add `--quick` to any step to work on the quick subset.
   `threadpoolctl`, because OpenBLAS ignores `omp_set_num_threads`. Each measurement is a full
   pass over the 5000 test queries after a 200-query warm-up, repeated 3 times, and the median
   QPS is reported. The garbage collector is off while timing. Builds use all 8 hardware threads.
+* **Keeping timings honest on a laptop** (`annbench/memory.py`). Each timing script pins its
+  working set (`SetProcessWorkingSetSizeEx` with a hard minimum on Windows), so the OS cannot
+  page the index out while it is being timed. Every timed pass records `page_faults_per_query`
+  in `results.csv`, which should be about 0. Each script also times a fixed CPU workload first
+  (`calibration_cpu` rows, with the power state), so CPU-speed drift between parts is visible.
+  With `ANN_REQUIRE_AC=1` set (as for the submitted run: `ANN_REQUIRE_AC=1 bash run_all.sh`),
+  every timed pass waits while the laptop is on battery and is repeated if power was lost during
+  it. On battery this machine's CPU runs at about half speed.
 * **Exact single-query timing** uses the first 1000 test queries. Brute force costs the same for
   every query, and timing all 5000 three times would take about 15 minutes per dataset.
 * **Index size** is the size of the index written with `faiss.write_index`. IVF-PQ's

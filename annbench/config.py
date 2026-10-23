@@ -82,6 +82,8 @@ QUICK.update({
     "kmeans_iter": 10,
     "pq_niter": 10,
     "pq_points_per_centroid": 64,
+    "stop_recall": 0.98,
+    "plateau_eps": 0.005,
     "p4_n_old": 50_000,
     "p4_n_new": 50_000,
     "p4_n_tune": 500,
