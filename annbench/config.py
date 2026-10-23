@@ -55,7 +55,7 @@ FULL = {
     "pq_niter": 25,               # FAISS defaults for the PQ sub-quantizer k-means
     "pq_points_per_centroid": 256,
     "stop_recall": 0.99,          # stop a sweep once tuning recall reaches this
-    "plateau_eps": 0.002,         # ... or once it gains less than this twice in a row
+    "plateau_eps": 0.003,         # ... or once it gains less than this twice in a row
     # Part 4 (synthetic drift)
     "p4_n_old": 200_000,
     "p4_n_new": 200_000,
