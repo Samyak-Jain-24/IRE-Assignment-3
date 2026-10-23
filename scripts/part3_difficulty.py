@@ -153,11 +153,11 @@ def main():
     axs[0, 0].set_title("(a) recall per difficulty bin at the 0.95 setting")
     axs[0, 1].set_ylabel("mean latency per query (ms)")
     axs[0, 1].set_title("(b) latency per bin, same settings")
-    axs[0, 1].set_ylim(bottom=0)
+    axs[0, 1].set_yscale("log")
     for ax in axs[0]:
         ax.set_xticks(x, ["Q1\nhardest", "Q2", "Q3", "Q4\neasiest"])
         ax.set_xlabel("relative-contrast quartile")
-        ax.legend(loc="lower right" if ax is axs[0, 0] else "upper right")
+    axs[0, 1].legend(loc="center right")          # one legend; (a) uses the same colours
     for ax, fam, letter in ((axs[1, 0], "HNSW", "c"), (axs[1, 1], "IVF-Flat", "d")):
         if fam + "_curves" not in per_bin:
             continue

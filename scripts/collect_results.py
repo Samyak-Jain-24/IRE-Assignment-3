@@ -4,6 +4,7 @@ Usage: python scripts/collect_results.py [--quick]
 """
 import argparse
 import platform
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -85,7 +86,7 @@ def main():
     faults = timed["page_faults_per_query"].dropna()
     print(f"[collect] CPU calibration over {len(cal)} scripts: {cal.min():.0f}-{cal.max():.0f} QPS; "
           f"max page faults per timed query {faults.max() if len(faults) else float('nan'):.3f}")
-    save_numbers(P["tables"] / "report_numbers.json", {f"env_{k}": v for k, v in env.items()} |
+    save_numbers(P["tables"] / "report_numbers.json", {"env_" + re.sub(r"\W+", "_", k).strip("_").lower(): v for k, v in env.items()} |
                  {"n_result_rows": len(df),
                   "call_overhead_us": 1e6 / float(calib["qps_median"].iloc[0]),
                   "cal_qps_min": float(cal.min()), "cal_qps_max": float(cal.max()),
