@@ -73,3 +73,17 @@ def time_batch(index, queries: np.ndarray, k: int, repeats: int, threads: int):
             index.search(queries, k)
             qps.append(len(queries) / (time.perf_counter() - t0))
     return np.array(qps)
+
+
+def call_overhead(d: int = 128, n: int = 5000, repeats: int = 3):
+    """Time the harness itself: single-query searches on a 1-vector flat index.
+
+    Almost all of this time is the Python loop, the SWIG call and FAISS's per-call setup, so it
+    is the fixed cost that every single-query measurement above also pays.
+    Returns (qps_runs, latency_s).
+    """
+    index = faiss.IndexFlatL2(d)
+    index.add(np.zeros((1, d), dtype=np.float32))
+    q = np.random.default_rng(0).random((n, d), dtype=np.float32)
+    _, qps_runs, lat = time_single_queries(index, q, 1, repeats, warmup=200)
+    return qps_runs, lat

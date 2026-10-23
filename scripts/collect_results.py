@@ -15,7 +15,8 @@ import psutil
 
 from annbench import config
 from annbench.report_utils import write_table
-from annbench.results import COLUMNS, save_numbers
+from annbench.results import COLUMNS, save_numbers, timing_summary
+from annbench.timing import call_overhead
 
 PARTS = ["part1_sift.csv", "part1_glove.csv", "part2_sift.csv", "part2_glove.csv", "part3_glove.csv", "part4_drift.csv"]
 
@@ -66,6 +67,13 @@ def main():
     missing = [f for f in PARTS if not (P["work"] / f).exists()]
     if missing:
         print("[collect] warning: missing", missing)
+    # calibration: fixed per-call cost of the timing harness (Python loop + SWIG + FAISS call setup)
+    qps_runs, lat = call_overhead()
+    calib = pd.DataFrame([{"experiment": "calibration_call_overhead", "dataset": "-", "index": "IndexFlatL2 (1 vector)",
+                           "search_param": "-", "search_value": "single", "split": "-", "n_queries": len(lat), "k": 1,
+                           "search_threads": 1, "repeats": len(qps_runs), **timing_summary(qps_runs, lat),
+                           "notes": "single-query search on a 1-vector index: harness overhead per call"}])
+    frames.append(calib)
     df = pd.concat(frames, ignore_index=True)[COLUMNS]
     df.to_csv(P["results"] / "results.csv", index=False)
     print(f"[collect] {len(df)} rows -> {P['results'] / 'results.csv'}")
@@ -73,7 +81,8 @@ def main():
     env = environment()
     write_table(pd.DataFrame({"Item": list(env), "Value": list(env.values())}), P["tables"] / "environment")
     save_numbers(P["tables"] / "report_numbers.json", {f"env_{k}": v for k, v in env.items()} |
-                 {"n_result_rows": len(df)})
+                 {"n_result_rows": len(df),
+                  "call_overhead_us": 1e6 / float(calib["qps_median"].iloc[0])})
 
 
 if __name__ == "__main__":
