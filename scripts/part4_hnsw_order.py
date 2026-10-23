@@ -7,7 +7,8 @@ On the control data of Part 4 (delta = 0) three HNSW graphs are built from the s
   one pass, 8 threads    all vectors in one shuffled add() (the "rebuilt" index of Part 4)
 For each graph we measure recall at several efSearch values (is the loss structural, i.e. does it
 persist at very large efSearch?), how many base-layer nodes have no incoming edge (such nodes can
-only be reached through the upper layers), and whether the missed true neighbours are old or new.
+only be reached through the upper layers), and what share of base-layer edges cross between the old
+and the new batch (the result notes also record whether missed neighbours are old or new).
 
 Usage: python scripts/part4_hnsw_order.py [--quick]
 """
@@ -90,10 +91,18 @@ def main():
         level_orig[orig] = levels
         orphan = (indeg_orig == 0) & (level_orig == 1)              # no way in except as an entry point
         is_old = np.arange(len(allv)) < n_old
+        # how well the two batches are wired together: share of base-layer edges crossing old <-> new
+        src = np.repeat(orig, nb0.shape[1]).reshape(nb0.shape)
+        valid = nb0 >= 0
+        dst_old = orig[np.maximum(nb0, 0)][valid] < n_old
+        src_old = src[valid] < n_old
+        old_to_new = float((src_old & ~dst_old).sum() / src_old.sum())
+        new_to_old = float((~src_old & dst_old).sum() / (~src_old).sum())
         res = {"Build": label, "Build time (s)": f"{build_s:.0f}",
                "orphans, old (%)": f"{100 * orphan[is_old].mean():.2f}",
                "orphans, new (%)": f"{100 * orphan[~is_old].mean():.2f}",
-               "median in-degree old / new": f"{np.median(indeg_orig[is_old]):.0f} / {np.median(indeg_orig[~is_old]):.0f}"}
+               "median in-degree old / new": f"{np.median(indeg_orig[is_old]):.0f} / {np.median(indeg_orig[~is_old]):.0f}",
+               "edges old&rarr;new / new&rarr;old (%)": f"{100 * old_to_new:.0f} / {100 * new_to_old:.0f}"}
         with limit_threads(build_threads()):
             for ef in EF_VALUES:
                 index.hnsw.efSearch = ef
@@ -109,13 +118,15 @@ def main():
                         build_threads=threads, notes=f"orphans_old={orphan[is_old].mean():.4f}; "
                         f"orphans_new={orphan[~is_old].mean():.4f}; missed_true_neighbours_old={frac_old:.3f}")
                 if ef == EF_VALUES[-1]:
-                    res["missed neighbours that are old (%)"] = f"{100 * frac_old:.0f}"
+                    res["queries with misses"] = int((rec < 1).sum())
         tag = "p4o_" + how + ("_t1" if threads == 1 else "")
         numbers.update({f"{tag}_orphan_old_pct": 100 * float(orphan[is_old].mean()),
                         f"{tag}_orphan_new_pct": 100 * float(orphan[~is_old].mean()),
                         f"{tag}_recall_ef{EF_VALUES[0]}": float(res[f"recall ef={EF_VALUES[0]}"]),
                         f"{tag}_recall_ef{EF_VALUES[-1]}": float(res[f"recall ef={EF_VALUES[-1]}"]),
-                        f"{tag}_missed_old_pct": float(res["missed neighbours that are old (%)"])})
+                        f"{tag}_old_to_new_pct": 100 * old_to_new, f"{tag}_new_to_old_pct": 100 * new_to_old,
+                        f"{tag}_indeg_old": float(np.median(indeg_orig[is_old])),
+                        f"{tag}_indeg_new": float(np.median(indeg_orig[~is_old]))})
         rows.append(res)
         print("[part4-order]", res, flush=True)
         del index

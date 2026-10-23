@@ -1,0 +1,609 @@
+
+=== [20:53:42] unit tests
+...............                                                          [100%]
+15 passed in 0.75s
+
+=== [20:53:44] data (downloads the ann-benchmarks files if they are missing)
+sift: D:\Documents\IRE\Assignments\IRE-Assignment-3\data\sift-128-euclidean.hdf5
+glove: D:\Documents\IRE\Assignments\IRE-Assignment-3\data\glove-100-angular.hdf5
+
+=== [20:53:45] Part 1: exact baseline on sift
+[part1] sift: base (1000000, 128), queries (10000, 128), zero vectors 0
+[part1] ground truth in 41.0s
+[part1] agreement with stored neighbours: {
+ "frac_identical_top10_set": 0.9935,
+ "frac_identical_top10_order": 0.9347,
+ "n_queries_differing": 65,
+ "n_differing_only_by_ties": 65,
+ "recall_ours_vs_file_mean": 1.0,
+ "recall_ours_vs_file_min": 1.0,
+ "recall_file_vs_ours_mean": 1.0,
+ "recall_file_vs_ours_min": 1.0,
+ "max_abs_dist_diff": 1.5258570272180805e-05,
+ "max_rel_dist_diff": 5.941103388836944e-08
+}
+[part1] CPU calibration: 414 QPS
+[part1] single-query exact: median 19.1 QPS, recall 1.0000
+[part1] batch exact, 1 thread(s): median 230.0 QPS
+[part1] batch exact, 8 thread(s): median 318.9 QPS
+[part1] batch_below_blas_threshold (999 queries, nq*d=127872): median 20.4 QPS
+[part1] batch_above_blas_threshold (1000 queries, nq*d=128000): median 232.0 QPS
+
+=== [21:02:08] Part 2: index benchmark on sift
+[part2] CPU calibration: 429 QPS
+[part2] sift HNSW M=8,efC=200: build 111.8s, 565.1 MiB (process RSS 1104 MiB)
+    efSearch=10    tune: recall 0.5614  QPS   15072.2  faults/query 0.00
+    efSearch=10    test: recall 0.6054  QPS   17703.6  faults/query 0.00
+    efSearch=16    tune: recall 0.6693  QPS   12858.9  faults/query 0.00
+    efSearch=16    test: recall 0.7031  QPS   12663.8  faults/query 0.00
+    efSearch=24    tune: recall 0.7486  QPS   10244.9  faults/query 0.00
+    efSearch=24    test: recall 0.7780  QPS   11690.6  faults/query 0.00
+    efSearch=32    tune: recall 0.7984  QPS    9142.3  faults/query 0.00
+    efSearch=32    test: recall 0.8238  QPS    9143.5  faults/query 0.01
+    efSearch=48    tune: recall 0.8580  QPS    6516.1  faults/query 0.00
+    efSearch=48    test: recall 0.8789  QPS    7841.1  faults/query 0.00
+    efSearch=64    tune: recall 0.8939  QPS    5359.2  faults/query 0.00
+    efSearch=64    test: recall 0.9100  QPS    5565.5  faults/query 0.00
+    efSearch=96    tune: recall 0.9320  QPS    3891.3  faults/query 0.00
+    efSearch=96    test: recall 0.9437  QPS    3949.9  faults/query 0.00
+    efSearch=128   tune: recall 0.9523  QPS    3070.1  faults/query 0.00
+    efSearch=128   test: recall 0.9593  QPS    3152.0  faults/query 0.00
+    efSearch=192   tune: recall 0.9722  QPS    2148.2  faults/query 0.00
+    efSearch=192   test: recall 0.9765  QPS    2027.4  faults/query 0.00
+    efSearch=256   tune: recall 0.9812  QPS    1675.9  faults/query 0.00
+    efSearch=256   test: recall 0.9833  QPS    1882.3  faults/query 0.00
+    efSearch=384   tune: recall 0.9888  QPS    1195.9  faults/query 0.00
+    efSearch=384   test: recall 0.9905  QPS    1225.2  faults/query 0.00
+    efSearch=512   tune: recall 0.9918  QPS     840.1  faults/query 0.00
+    efSearch=512   test: recall 0.9934  QPS     871.6  faults/query 0.00
+[part2] sift HNSW M=16,efC=200: build 148.0s, 625.9 MiB (process RSS 1165 MiB)
+    efSearch=10    tune: recall 0.7060  QPS   14627.6  faults/query 0.00
+    efSearch=10    test: recall 0.7340  QPS   18170.2  faults/query 0.01
+    efSearch=16    tune: recall 0.7994  QPS   12294.1  faults/query 0.00
+    efSearch=16    test: recall 0.8237  QPS   13693.6  faults/query 0.00
+    efSearch=24    tune: recall 0.8667  QPS   10407.7  faults/query 0.00
+    efSearch=24    test: recall 0.8850  QPS    9900.0  faults/query 0.00
+    efSearch=32    tune: recall 0.9051  QPS    8034.3  faults/query 0.00
+    efSearch=32    test: recall 0.9195  QPS    9105.0  faults/query 0.00
+    efSearch=48    tune: recall 0.9452  QPS    6095.7  faults/query 0.00
+    efSearch=48    test: recall 0.9537  QPS    4480.1  faults/query 0.00
+    efSearch=64    tune: recall 0.9657  QPS    3779.2  faults/query 0.00
+    efSearch=64    test: recall 0.9715  QPS    3828.9  faults/query 0.00
+    efSearch=96    tune: recall 0.9838  QPS    2826.8  faults/query 0.00
+    efSearch=96    test: recall 0.9861  QPS    3242.7  faults/query 0.00
+    efSearch=128   tune: recall 0.9911  QPS    2636.8  faults/query 0.00
+    efSearch=128   test: recall 0.9921  QPS    2216.6  faults/query 0.00
+[part2] sift HNSW M=32,efC=200: build 169.5s, 747.8 MiB (process RSS 1207 MiB)
+    efSearch=10    tune: recall 0.7725  QPS   10141.1  faults/query 0.00
+    efSearch=10    test: recall 0.7900  QPS   13162.1  faults/query 0.00
+    efSearch=16    tune: recall 0.8556  QPS    9962.1  faults/query 0.00
+    efSearch=16    test: recall 0.8663  QPS   10718.0  faults/query 0.00
+    efSearch=24    tune: recall 0.9113  QPS    7667.9  faults/query 0.00
+    efSearch=24    test: recall 0.9192  QPS    8897.2  faults/query 0.00
+    efSearch=32    tune: recall 0.9413  QPS    6745.4  faults/query 0.00
+    efSearch=32    test: recall 0.9471  QPS    6795.6  faults/query 0.00
+    efSearch=48    tune: recall 0.9699  QPS    4721.8  faults/query 0.00
+    efSearch=48    test: recall 0.9731  QPS    5100.8  faults/query 0.00
+    efSearch=64    tune: recall 0.9828  QPS    3821.7  faults/query 0.00
+    efSearch=64    test: recall 0.9853  QPS    3989.7  faults/query 0.00
+    efSearch=96    tune: recall 0.9928  QPS    2536.1  faults/query 0.00
+    efSearch=96    test: recall 0.9935  QPS    2884.7  faults/query 0.11
+[part2] sift IVF-Flat nlist=1024: build 18.3s, 496.4 MiB (process RSS 1276 MiB)
+    nprobe=1     tune: recall 0.3536  QPS   11810.1  faults/query 0.00
+    nprobe=1     test: recall 0.3953  QPS   14612.6  faults/query 0.00
+    nprobe=2     tune: recall 0.5193  QPS    8588.6  faults/query 0.00
+    nprobe=2     test: recall 0.5650  QPS    8261.5  faults/query 0.00
+    nprobe=4     tune: recall 0.6909  QPS    4293.3  faults/query 0.00
+    nprobe=4     test: recall 0.7251  QPS    4751.6  faults/query 0.00
+    nprobe=8     tune: recall 0.8322  QPS    2630.8  faults/query 0.00
+    nprobe=8     test: recall 0.8555  QPS    2678.9  faults/query 0.00
+    nprobe=12    tune: recall 0.8933  QPS    1599.1  faults/query 0.00
+    nprobe=12    test: recall 0.9101  QPS    1865.6  faults/query 0.00
+    nprobe=16    tune: recall 0.9300  QPS    1376.2  faults/query 0.00
+    nprobe=16    test: recall 0.9398  QPS    1390.7  faults/query 0.00
+    nprobe=24    tune: recall 0.9643  QPS     934.1  faults/query 0.00
+    nprobe=24    test: recall 0.9689  QPS     954.5  faults/query 0.00
+    nprobe=32    tune: recall 0.9798  QPS     727.1  faults/query 0.01
+    nprobe=32    test: recall 0.9819  QPS     711.2  faults/query 0.01
+    nprobe=48    tune: recall 0.9922  QPS     490.0  faults/query 0.00
+    nprobe=48    test: recall 0.9926  QPS     491.9  faults/query 0.00
+[part2] sift IVF-Flat nlist=4096: build 240.7s, 497.9 MiB (process RSS 1190 MiB)
+    nprobe=1     tune: recall 0.2645  QPS    5717.6  faults/query 0.00
+    nprobe=1     test: recall 0.3092  QPS    8927.5  faults/query 0.00
+    nprobe=2     tune: recall 0.4007  QPS    8928.9  faults/query 0.00
+    nprobe=2     test: recall 0.4544  QPS    8133.9  faults/query 0.00
+    nprobe=4     tune: recall 0.5551  QPS    7257.9  faults/query 0.00
+    nprobe=4     test: recall 0.6035  QPS    7110.0  faults/query 0.00
+    nprobe=8     tune: recall 0.7061  QPS    5359.7  faults/query 0.00
+    nprobe=8     test: recall 0.7444  QPS    5412.9  faults/query 0.00
+    nprobe=12    tune: recall 0.7855  QPS    4258.1  faults/query 0.00
+    nprobe=12    test: recall 0.8142  QPS    4363.1  faults/query 0.00
+    nprobe=16    tune: recall 0.8338  QPS    3702.3  faults/query 0.00
+    nprobe=16    test: recall 0.8577  QPS    3505.3  faults/query 0.00
+    nprobe=24    tune: recall 0.8925  QPS    2792.7  faults/query 0.00
+    nprobe=24    test: recall 0.9071  QPS    2376.1  faults/query 0.00
+    nprobe=32    tune: recall 0.9236  QPS    2000.2  faults/query 0.00
+    nprobe=32    test: recall 0.9364  QPS    2078.0  faults/query 0.00
+    nprobe=48    tune: recall 0.9577  QPS    1440.2  faults/query 0.00
+    nprobe=48    test: recall 0.9642  QPS    1500.9  faults/query 0.00
+    nprobe=64    tune: recall 0.9734  QPS    1131.5  faults/query 0.00
+    nprobe=64    test: recall 0.9773  QPS    1146.4  faults/query 0.00
+    nprobe=96    tune: recall 0.9875  QPS     819.3  faults/query 0.00
+    nprobe=96    test: recall 0.9898  QPS     803.3  faults/query 0.01
+    nprobe=128   tune: recall 0.9937  QPS     630.2  faults/query 0.00
+    nprobe=128   test: recall 0.9947  QPS     625.6  faults/query 0.00
+[part2] sift IVF-PQ nlist=4096,m=16,nbits=8: build 273.3s, 25.0 MiB (process RSS 720 MiB)
+    nprobe=1     tune: recall 0.2413  QPS    7778.3  faults/query 0.00
+    nprobe=1     test: recall 0.2758  QPS    9510.2  faults/query 0.00
+    nprobe=2     tune: recall 0.3416  QPS    8232.4  faults/query 0.00
+    nprobe=2     test: recall 0.3796  QPS    8013.7  faults/query 0.00
+    nprobe=4     tune: recall 0.4337  QPS    6296.2  faults/query 0.00
+    nprobe=4     test: recall 0.4660  QPS    7388.9  faults/query 0.00
+    nprobe=8     tune: recall 0.5031  QPS    6671.1  faults/query 0.00
+    nprobe=8     test: recall 0.5275  QPS    6544.1  faults/query 0.00
+    nprobe=12    tune: recall 0.5338  QPS    5705.4  faults/query 0.00
+    nprobe=12    test: recall 0.5520  QPS    5714.7  faults/query 0.00
+    nprobe=16    tune: recall 0.5494  QPS    5156.6  faults/query 0.00
+    nprobe=16    test: recall 0.5649  QPS    5161.3  faults/query 0.00
+    nprobe=24    tune: recall 0.5654  QPS    4117.1  faults/query 0.00
+    nprobe=24    test: recall 0.5773  QPS    3889.5  faults/query 0.00
+    nprobe=32    tune: recall 0.5723  QPS    3275.2  faults/query 0.00
+    nprobe=32    test: recall 0.5849  QPS    3672.0  faults/query 0.00
+    nprobe=48    tune: recall 0.5793  QPS    2639.2  faults/query 0.00
+    nprobe=48    test: recall 0.5906  QPS    2604.5  faults/query 0.00
+    nprobe=64    tune: recall 0.5819  QPS    2152.5  faults/query 0.00
+    nprobe=64    test: recall 0.5928  QPS    2263.8  faults/query 0.01
+    nprobe=96    tune: recall 0.5839  QPS    1647.0  faults/query 0.00
+    nprobe=96    test: recall 0.5944  QPS    1529.9  faults/query 0.00
+[part2] sift IVF-PQ nlist=4096,m=32,nbits=8: build 305.7s, 40.3 MiB (process RSS 806 MiB)
+    nprobe=1     tune: recall 0.2562  QPS    5832.1  faults/query 0.00
+    nprobe=1     test: recall 0.2966  QPS    6541.2  faults/query 0.00
+    nprobe=2     tune: recall 0.3782  QPS    6781.7  faults/query 0.00
+    nprobe=2     test: recall 0.4225  QPS    6567.7  faults/query 0.00
+    nprobe=4     tune: recall 0.5022  QPS    5403.5  faults/query 0.00
+    nprobe=4     test: recall 0.5381  QPS    5670.3  faults/query 0.00
+    nprobe=8     tune: recall 0.6050  QPS    5031.1  faults/query 0.00
+    nprobe=8     test: recall 0.6317  QPS    4509.5  faults/query 0.00
+    nprobe=12    tune: recall 0.6522  QPS    3766.9  faults/query 0.00
+    nprobe=12    test: recall 0.6704  QPS    3918.8  faults/query 0.00
+    nprobe=16    tune: recall 0.6758  QPS    3153.2  faults/query 0.00
+    nprobe=16    test: recall 0.6925  QPS    3400.9  faults/query 0.00
+    nprobe=24    tune: recall 0.7038  QPS    2671.0  faults/query 0.00
+    nprobe=24    test: recall 0.7142  QPS    2738.3  faults/query 0.00
+    nprobe=32    tune: recall 0.7165  QPS    2236.3  faults/query 0.00
+    nprobe=32    test: recall 0.7265  QPS    2198.9  faults/query 0.00
+    nprobe=48    tune: recall 0.7281  QPS    1640.2  faults/query 0.00
+    nprobe=48    test: recall 0.7367  QPS    1657.2  faults/query 0.00
+    nprobe=64    tune: recall 0.7325  QPS    1363.2  faults/query 0.00
+    nprobe=64    test: recall 0.7412  QPS    1305.5  faults/query 0.00
+    nprobe=96    tune: recall 0.7365  QPS     872.2  faults/query 0.00
+    nprobe=96    test: recall 0.7445  QPS     922.5  faults/query 0.00
+    nprobe=128   tune: recall 0.7384  QPS     729.0  faults/query 0.00
+    nprobe=128   test: recall 0.7459  QPS     740.1  faults/query 0.00
+    nprobe=192   tune: recall 0.7393  QPS     514.3  faults/query 0.00
+    nprobe=192   test: recall 0.7468  QPS     507.8  faults/query 0.00
+[part2] sift IVF-PQ nlist=4096,m=64,nbits=8: build 367.3s, 70.8 MiB (process RSS 971 MiB)
+    nprobe=1     tune: recall 0.2630  QPS    4654.9  faults/query 0.00
+    nprobe=1     test: recall 0.3061  QPS    5626.3  faults/query 0.00
+    nprobe=2     tune: recall 0.3960  QPS    4818.9  faults/query 0.00
+    nprobe=2     test: recall 0.4464  QPS    4641.9  faults/query 0.00
+    nprobe=4     tune: recall 0.5421  QPS    4237.7  faults/query 0.00
+    nprobe=4     test: recall 0.5850  QPS    3995.0  faults/query 0.00
+    nprobe=8     tune: recall 0.6761  QPS    2662.9  faults/query 0.00
+    nprobe=8     test: recall 0.7083  QPS    3060.8  faults/query 0.00
+    nprobe=12    tune: recall 0.7414  QPS    2428.6  faults/query 0.00
+    nprobe=12    test: recall 0.7645  QPS    2594.8  faults/query 0.00
+    nprobe=16    tune: recall 0.7783  QPS    2320.7  faults/query 0.00
+    nprobe=16    test: recall 0.7980  QPS    1959.0  faults/query 0.00
+    nprobe=24    tune: recall 0.8201  QPS    1626.9  faults/query 0.00
+    nprobe=24    test: recall 0.8322  QPS    1546.2  faults/query 0.00
+    nprobe=32    tune: recall 0.8407  QPS    1312.4  faults/query 0.00
+    nprobe=32    test: recall 0.8518  QPS    1333.5  faults/query 0.00
+    nprobe=48    tune: recall 0.8609  QPS     957.8  faults/query 0.00
+    nprobe=48    test: recall 0.8691  QPS     982.5  faults/query 0.00
+    nprobe=64    tune: recall 0.8700  QPS     749.2  faults/query 0.00
+    nprobe=64    test: recall 0.8765  QPS     632.1  faults/query 0.00
+    nprobe=96    tune: recall 0.8776  QPS     537.4  faults/query 0.00
+    nprobe=96    test: recall 0.8832  QPS     515.2  faults/query 0.00
+    nprobe=128   tune: recall 0.8806  QPS     406.3  faults/query 0.00
+    nprobe=128   test: recall 0.8855  QPS     402.1  faults/query 0.00
+    nprobe=192   tune: recall 0.8826  QPS     268.2  faults/query 0.00
+    nprobe=192   test: recall 0.8869  QPS     273.9  faults/query 0.00
+    nprobe=256   tune: recall 0.8830  QPS     167.8  faults/query 0.11
+    nprobe=256   test: recall 0.8873  QPS     200.1  faults/query 0.00
+[part2] sift IVF-Flat nlist=8192: build 473.0s, 500.0 MiB (process RSS 1202 MiB)
+    nprobe=1     tune: recall 0.2380  QPS    3006.4  faults/query 0.02
+    nprobe=1     test: recall 0.2717  QPS    4827.9  faults/query 0.00
+    nprobe=2     tune: recall 0.3568  QPS    4423.3  faults/query 0.00
+    nprobe=2     test: recall 0.4044  QPS    4720.7  faults/query 0.00
+    nprobe=4     tune: recall 0.5016  QPS    4582.7  faults/query 0.00
+    nprobe=4     test: recall 0.5466  QPS    4635.7  faults/query 0.00
+    nprobe=8     tune: recall 0.6469  QPS    3877.4  faults/query 0.00
+    nprobe=8     test: recall 0.6888  QPS    3961.5  faults/query 0.00
+    nprobe=12    tune: recall 0.7290  QPS    3163.8  faults/query 0.00
+    nprobe=12    test: recall 0.7634  QPS    3553.7  faults/query 0.00
+    nprobe=16    tune: recall 0.7826  QPS    2773.3  faults/query 0.00
+    nprobe=16    test: recall 0.8105  QPS    3264.9  faults/query 0.00
+    nprobe=24    tune: recall 0.8470  QPS    2601.0  faults/query 0.00
+    nprobe=24    test: recall 0.8670  QPS    2722.6  faults/query 0.00
+    nprobe=32    tune: recall 0.8858  QPS    2450.8  faults/query 0.00
+    nprobe=32    test: recall 0.8997  QPS    2239.8  faults/query 0.00
+    nprobe=48    tune: recall 0.9282  QPS    1631.9  faults/query 0.00
+    nprobe=48    test: recall 0.9368  QPS    1799.5  faults/query 0.00
+    nprobe=64    tune: recall 0.9515  QPS    1259.1  faults/query 0.00
+    nprobe=64    test: recall 0.9567  QPS    1469.5  faults/query 0.00
+    nprobe=96    tune: recall 0.9735  QPS    1117.1  faults/query 0.00
+    nprobe=96    test: recall 0.9766  QPS    1080.2  faults/query 0.02
+    nprobe=128   tune: recall 0.9843  QPS     910.0  faults/query 0.00
+    nprobe=128   test: recall 0.9856  QPS     910.1  faults/query 0.00
+    nprobe=192   tune: recall 0.9929  QPS     634.1  faults/query 0.00
+    nprobe=192   test: recall 0.9940  QPS     651.6  faults/query 0.00
+[part2] sift done in 43.6 min
+
+=== [21:45:48] Part 1: exact baseline on glove
+[part1] glove: base (1183514, 100), queries (10000, 100), zero vectors 0
+[part1] ground truth in 35.4s
+[part1] agreement with stored neighbours: {
+ "frac_identical_top10_set": 0.9999,
+ "frac_identical_top10_order": 0.9999,
+ "n_queries_differing": 1,
+ "n_differing_only_by_ties": 1,
+ "recall_ours_vs_file_mean": 1.0,
+ "recall_ours_vs_file_min": 1.0,
+ "recall_file_vs_ours_mean": 1.0,
+ "recall_file_vs_ours_min": 1.0,
+ "max_abs_dist_diff": 1.7618983294553914e-07,
+ "max_rel_dist_diff": 3.498808352483111e-07
+}
+[part1] CPU calibration: 498 QPS
+[part1] single-query exact: median 26.6 QPS, recall 1.0000
+[part1] batch exact, 1 thread(s): median 255.8 QPS
+[part1] batch exact, 8 thread(s): median 307.7 QPS
+[part1] batch_below_blas_threshold (1279 queries, nq*d=127900): median 26.7 QPS
+[part1] batch_above_blas_threshold (1280 queries, nq*d=128000): median 261.4 QPS
+
+=== [21:53:10] Part 2: index benchmark on glove
+[part2] CPU calibration: 455 QPS
+[part2] glove HNSW M=8,efC=200: build 128.8s, 542.4 MiB (process RSS 1045 MiB)
+    efSearch=10    tune: recall 0.3161  QPS   13540.9  faults/query 0.02
+    efSearch=10    test: recall 0.3105  QPS   18148.4  faults/query 0.00
+    efSearch=16    tune: recall 0.3907  QPS   13494.9  faults/query 0.00
+    efSearch=16    test: recall 0.3900  QPS   15224.3  faults/query 0.00
+    efSearch=24    tune: recall 0.4554  QPS   12360.2  faults/query 0.00
+    efSearch=24    test: recall 0.4598  QPS   11382.4  faults/query 0.00
+    efSearch=32    tune: recall 0.5021  QPS    9084.2  faults/query 0.00
+    efSearch=32    test: recall 0.5054  QPS   10748.1  faults/query 0.00
+    efSearch=48    tune: recall 0.5700  QPS    6160.3  faults/query 0.00
+    efSearch=48    test: recall 0.5740  QPS    7392.5  faults/query 0.00
+    efSearch=64    tune: recall 0.6155  QPS    5317.4  faults/query 0.00
+    efSearch=64    test: recall 0.6185  QPS    6183.2  faults/query 0.00
+    efSearch=96    tune: recall 0.6714  QPS    4265.8  faults/query 0.00
+    efSearch=96    test: recall 0.6706  QPS    4182.7  faults/query 0.00
+    efSearch=128   tune: recall 0.7088  QPS    3294.2  faults/query 0.00
+    efSearch=128   test: recall 0.7062  QPS    2988.9  faults/query 0.00
+    efSearch=192   tune: recall 0.7503  QPS    2314.3  faults/query 0.00
+    efSearch=192   test: recall 0.7491  QPS    2074.5  faults/query 0.00
+    efSearch=256   tune: recall 0.7778  QPS    1586.4  faults/query 0.00
+    efSearch=256   test: recall 0.7779  QPS    1638.6  faults/query 0.00
+    efSearch=384   tune: recall 0.8121  QPS    1013.6  faults/query 0.00
+    efSearch=384   test: recall 0.8127  QPS    1095.0  faults/query 0.00
+    efSearch=512   tune: recall 0.8317  QPS     803.1  faults/query 0.00
+    efSearch=512   test: recall 0.8320  QPS     777.7  faults/query 0.00
+    efSearch=768   tune: recall 0.8561  QPS     480.6  faults/query 0.00
+    efSearch=768   test: recall 0.8557  QPS     483.4  faults/query 0.00
+    efSearch=1024  tune: recall 0.8712  QPS     324.0  faults/query 0.00
+    efSearch=1024  test: recall 0.8701  QPS     332.1  faults/query 0.01
+[part2] glove HNSW M=16,efC=200: build 215.4s, 614.3 MiB (process RSS 1115 MiB)
+    efSearch=10    tune: recall 0.4810  QPS   13278.4  faults/query 0.02
+    efSearch=10    test: recall 0.4849  QPS   14222.8  faults/query 0.00
+    efSearch=16    tune: recall 0.5681  QPS   10752.4  faults/query 0.00
+    efSearch=16    test: recall 0.5689  QPS   11058.7  faults/query 0.00
+    efSearch=24    tune: recall 0.6350  QPS    8811.6  faults/query 0.00
+    efSearch=24    test: recall 0.6348  QPS    8314.6  faults/query 0.00
+    efSearch=32    tune: recall 0.6773  QPS    6846.8  faults/query 0.00
+    efSearch=32    test: recall 0.6783  QPS    6362.9  faults/query 0.00
+    efSearch=48    tune: recall 0.7336  QPS    5147.0  faults/query 0.00
+    efSearch=48    test: recall 0.7352  QPS    5170.2  faults/query 0.00
+    efSearch=64    tune: recall 0.7674  QPS    4065.9  faults/query 0.00
+    efSearch=64    test: recall 0.7687  QPS    4181.5  faults/query 0.00
+    efSearch=96    tune: recall 0.8084  QPS    2913.3  faults/query 0.00
+    efSearch=96    test: recall 0.8086  QPS    2910.3  faults/query 0.00
+    efSearch=128   tune: recall 0.8343  QPS    2191.2  faults/query 0.00
+    efSearch=128   test: recall 0.8339  QPS    2270.3  faults/query 0.00
+    efSearch=192   tune: recall 0.8655  QPS    1510.8  faults/query 0.00
+    efSearch=192   test: recall 0.8636  QPS    1550.4  faults/query 0.00
+    efSearch=256   tune: recall 0.8847  QPS    1161.4  faults/query 0.02
+    efSearch=256   test: recall 0.8829  QPS    1075.1  faults/query 0.00
+    efSearch=384   tune: recall 0.9084  QPS     732.0  faults/query 0.00
+    efSearch=384   test: recall 0.9065  QPS     734.5  faults/query 0.00
+    efSearch=512   tune: recall 0.9231  QPS     506.6  faults/query 0.00
+    efSearch=512   test: recall 0.9210  QPS     540.4  faults/query 0.00
+    efSearch=768   tune: recall 0.9408  QPS     344.0  faults/query 0.00
+    efSearch=768   test: recall 0.9399  QPS     350.5  faults/query 0.00
+    efSearch=1024  tune: recall 0.9524  QPS     239.0  faults/query 0.00
+    efSearch=1024  test: recall 0.9509  QPS     236.4  faults/query 0.00
+[part2] glove HNSW M=32,efC=200: build 322.7s, 758.6 MiB (process RSS 898 MiB)
+    efSearch=10    tune: recall 0.5756  QPS   10040.7  faults/query 0.02
+    efSearch=10    test: recall 0.5814  QPS    9057.1  faults/query 0.00
+    efSearch=16    tune: recall 0.6558  QPS    7385.5  faults/query 0.00
+    efSearch=16    test: recall 0.6626  QPS    1029.4  faults/query 0.00
+    efSearch=24    tune: recall 0.7177  QPS     738.1  faults/query 0.00
+    efSearch=24    test: recall 0.7235  QPS    3595.2  faults/query 0.00
+    efSearch=32    tune: recall 0.7561  QPS    3471.5  faults/query 0.15
+    efSearch=32    test: recall 0.7613  QPS    3998.8  faults/query 0.03
+    efSearch=48    tune: recall 0.8051  QPS    2746.5  faults/query 0.11
+    efSearch=48    test: recall 0.8085  QPS    2724.4  faults/query 0.02
+    efSearch=64    tune: recall 0.8336  QPS    2313.2  faults/query 0.02
+    efSearch=64    test: recall 0.8356  QPS    2160.5  faults/query 0.00
+    efSearch=96    tune: recall 0.8694  QPS    1699.0  faults/query 0.01
+    efSearch=96    test: recall 0.8705  QPS    1697.5  faults/query 0.00
+    efSearch=128   tune: recall 0.8928  QPS    1143.7  faults/query 0.00
+    efSearch=128   test: recall 0.8923  QPS    1424.4  faults/query 0.00
+    efSearch=192   tune: recall 0.9191  QPS     953.0  faults/query 0.00
+    efSearch=192   test: recall 0.9186  QPS     964.0  faults/query 0.00
+    efSearch=256   tune: recall 0.9353  QPS     689.6  faults/query 0.00
+    efSearch=256   test: recall 0.9350  QPS     727.2  faults/query 0.00
+    efSearch=384   tune: recall 0.9549  QPS     517.0  faults/query 0.00
+    efSearch=384   test: recall 0.9541  QPS     533.5  faults/query 0.00
+    efSearch=512   tune: recall 0.9658  QPS     403.2  faults/query 0.00
+    efSearch=512   test: recall 0.9662  QPS     402.0  faults/query 0.00
+    efSearch=768   tune: recall 0.9784  QPS     239.7  faults/query 0.00
+    efSearch=768   test: recall 0.9784  QPS     265.3  faults/query 0.00
+    efSearch=1024  tune: recall 0.9852  QPS     190.9  faults/query 0.00
+    efSearch=1024  test: recall 0.9854  QPS     190.6  faults/query 0.00
+[part2] glove IVF-Flat nlist=1024: build 21.3s, 460.9 MiB (process RSS 1156 MiB)
+    nprobe=1     tune: recall 0.3956  QPS   10479.7  faults/query 0.00
+    nprobe=1     test: recall 0.4037  QPS   12771.7  faults/query 0.00
+    nprobe=2     tune: recall 0.5262  QPS    8559.2  faults/query 0.00
+    nprobe=2     test: recall 0.5316  QPS    8659.7  faults/query 0.00
+    nprobe=4     tune: recall 0.6360  QPS    4975.7  faults/query 0.00
+    nprobe=4     test: recall 0.6410  QPS    5096.4  faults/query 0.00
+    nprobe=8     tune: recall 0.7241  QPS    2832.2  faults/query 0.00
+    nprobe=8     test: recall 0.7282  QPS    2851.4  faults/query 0.00
+    nprobe=12    tune: recall 0.7693  QPS    2026.9  faults/query 0.00
+    nprobe=12    test: recall 0.7725  QPS    1983.3  faults/query 0.00
+    nprobe=16    tune: recall 0.7975  QPS    1501.7  faults/query 0.00
+    nprobe=16    test: recall 0.8020  QPS    1497.7  faults/query 0.00
+    nprobe=24    tune: recall 0.8341  QPS    1041.3  faults/query 0.00
+    nprobe=24    test: recall 0.8375  QPS    1044.2  faults/query 0.00
+    nprobe=32    tune: recall 0.8577  QPS     771.9  faults/query 0.00
+    nprobe=32    test: recall 0.8620  QPS     805.2  faults/query 0.00
+    nprobe=48    tune: recall 0.8891  QPS     548.7  faults/query 0.00
+    nprobe=48    test: recall 0.8913  QPS     553.7  faults/query 0.00
+    nprobe=64    tune: recall 0.9099  QPS     405.4  faults/query 0.00
+    nprobe=64    test: recall 0.9101  QPS     362.4  faults/query 0.06
+    nprobe=96    tune: recall 0.9351  QPS     273.5  faults/query 0.12
+    nprobe=96    test: recall 0.9362  QPS     197.9  faults/query 0.96
+    nprobe=128   tune: recall 0.9506  QPS     167.5  faults/query 0.11
+    nprobe=128   test: recall 0.9521  QPS     167.0  faults/query 0.05
+    nprobe=192   tune: recall 0.9696  QPS     107.8  faults/query 0.11
+    nprobe=192   test: recall 0.9703  QPS     108.7  faults/query 0.13
+    nprobe=256   tune: recall 0.9807  QPS      82.3  faults/query 0.11
+    nprobe=256   test: recall 0.9812  QPS      82.2  faults/query 0.01
+    nprobe=384   tune: recall 0.9926  QPS      55.0  faults/query 0.12
+    nprobe=384   test: recall 0.9924  QPS      55.0  faults/query 0.12
+[part2] glove IVF-Flat nlist=4096: build 345.4s, 462.1 MiB (process RSS 1103 MiB)
+    nprobe=1     tune: recall 0.3230  QPS    3373.9  faults/query 0.00
+    nprobe=1     test: recall 0.3325  QPS    4534.7  faults/query 0.00
+    nprobe=2     tune: recall 0.4366  QPS    4487.3  faults/query 0.00
+    nprobe=2     test: recall 0.4448  QPS    6684.7  faults/query 0.00
+    nprobe=4     tune: recall 0.5433  QPS    4391.8  faults/query 0.00
+    nprobe=4     test: recall 0.5519  QPS    3896.4  faults/query 0.00
+    nprobe=8     tune: recall 0.6381  QPS    4618.8  faults/query 0.00
+    nprobe=8     test: recall 0.6458  QPS    2698.2  faults/query 0.00
+    nprobe=12    tune: recall 0.6850  QPS    3358.4  faults/query 0.00
+    nprobe=12    test: recall 0.6928  QPS    2316.2  faults/query 0.00
+    nprobe=16    tune: recall 0.7161  QPS    2396.4  faults/query 0.00
+    nprobe=16    test: recall 0.7233  QPS    1999.8  faults/query 0.00
+    nprobe=24    tune: recall 0.7567  QPS    2568.8  faults/query 0.00
+    nprobe=24    test: recall 0.7623  QPS    2873.8  faults/query 0.00
+    nprobe=32    tune: recall 0.7848  QPS    2323.7  faults/query 0.00
+    nprobe=32    test: recall 0.7869  QPS    2331.4  faults/query 0.00
+    nprobe=48    tune: recall 0.8190  QPS    1684.9  faults/query 0.00
+    nprobe=48    test: recall 0.8223  QPS    1689.8  faults/query 0.00
+    nprobe=64    tune: recall 0.8422  QPS    1336.7  faults/query 0.00
+    nprobe=64    test: recall 0.8447  QPS    1326.4  faults/query 0.00
+    nprobe=96    tune: recall 0.8725  QPS     902.0  faults/query 0.00
+    nprobe=96    test: recall 0.8739  QPS     934.1  faults/query 0.00
+    nprobe=128   tune: recall 0.8922  QPS     728.6  faults/query 0.00
+    nprobe=128   test: recall 0.8919  QPS     707.5  faults/query 0.00
+    nprobe=192   tune: recall 0.9178  QPS     509.0  faults/query 0.00
+    nprobe=192   test: recall 0.9181  QPS     517.2  faults/query 0.00
+    nprobe=256   tune: recall 0.9340  QPS     378.5  faults/query 0.00
+    nprobe=256   test: recall 0.9347  QPS     396.5  faults/query 0.00
+    nprobe=384   tune: recall 0.9540  QPS     242.2  faults/query 0.03
+    nprobe=384   test: recall 0.9528  QPS     208.5  faults/query 0.01
+[timing] on battery: waiting for AC power before timing ...
+[timing] AC power back, continuing
+    nprobe=512   tune: recall 0.9658  QPS     233.8  faults/query 0.61
+    nprobe=512   test: recall 0.9649  QPS     212.0  faults/query 0.03
+[part2] glove IVF-PQ nlist=4096,m=20,nbits=8: build 387.1s, 33.3 MiB (process RSS 718 MiB)
+    nprobe=1     tune: recall 0.2683  QPS    5796.3  faults/query 0.00
+    nprobe=1     test: recall 0.2758  QPS    6767.0  faults/query 0.00
+    nprobe=2     tune: recall 0.3416  QPS    6514.0  faults/query 0.00
+    nprobe=2     test: recall 0.3473  QPS    6192.2  faults/query 0.00
+    nprobe=4     tune: recall 0.4004  QPS    5242.9  faults/query 0.00
+    nprobe=4     test: recall 0.4061  QPS    5704.3  faults/query 0.00
+    nprobe=8     tune: recall 0.4428  QPS    4783.7  faults/query 0.00
+    nprobe=8     test: recall 0.4499  QPS    5321.5  faults/query 0.00
+    nprobe=12    tune: recall 0.4620  QPS    4288.1  faults/query 0.00
+    nprobe=12    test: recall 0.4686  QPS    4749.5  faults/query 0.00
+    nprobe=16    tune: recall 0.4740  QPS    3983.6  faults/query 0.00
+    nprobe=16    test: recall 0.4803  QPS    3628.4  faults/query 0.00
+    nprobe=24    tune: recall 0.4881  QPS    3786.2  faults/query 0.00
+    nprobe=24    test: recall 0.4927  QPS    3568.4  faults/query 0.00
+    nprobe=32    tune: recall 0.4966  QPS    2945.3  faults/query 0.00
+    nprobe=32    test: recall 0.5007  QPS    2998.1  faults/query 0.00
+    nprobe=48    tune: recall 0.5066  QPS    2325.4  faults/query 0.00
+    nprobe=48    test: recall 0.5111  QPS    2286.3  faults/query 0.00
+    nprobe=64    tune: recall 0.5128  QPS    1925.6  faults/query 0.00
+    nprobe=64    test: recall 0.5170  QPS    1841.3  faults/query 0.00
+    nprobe=96    tune: recall 0.5197  QPS    1358.7  faults/query 0.00
+    nprobe=96    test: recall 0.5231  QPS    1332.7  faults/query 0.02
+    nprobe=128   tune: recall 0.5245  QPS    1017.1  faults/query 0.00
+    nprobe=128   test: recall 0.5263  QPS    1039.5  faults/query 0.00
+    nprobe=192   tune: recall 0.5289  QPS     720.3  faults/query 0.00
+    nprobe=192   test: recall 0.5316  QPS     742.2  faults/query 0.00
+    nprobe=256   tune: recall 0.5317  QPS     536.7  faults/query 0.00
+    nprobe=256   test: recall 0.5341  QPS     572.1  faults/query 0.00
+    nprobe=384   tune: recall 0.5348  QPS     395.8  faults/query 0.00
+    nprobe=384   test: recall 0.5366  QPS     395.1  faults/query 0.00
+    nprobe=512   tune: recall 0.5363  QPS     289.1  faults/query 0.00
+    nprobe=512   test: recall 0.5378  QPS     305.0  faults/query 0.00
+[part2] glove IVF-PQ nlist=4096,m=25,nbits=8: build 395.2s, 38.9 MiB (process RSS 675 MiB)
+    nprobe=1     tune: recall 0.2872  QPS    5322.6  faults/query 0.00
+    nprobe=1     test: recall 0.2937  QPS    6407.7  faults/query 0.00
+    nprobe=2     tune: recall 0.3716  QPS    7376.4  faults/query 0.00
+    nprobe=2     test: recall 0.3773  QPS    7229.3  faults/query 0.00
+    nprobe=4     tune: recall 0.4412  QPS    6052.7  faults/query 0.00
+    nprobe=4     test: recall 0.4475  QPS    6140.1  faults/query 0.00
+    nprobe=8     tune: recall 0.4949  QPS    5443.2  faults/query 0.00
+    nprobe=8     test: recall 0.5014  QPS    5250.3  faults/query 0.00
+    nprobe=12    tune: recall 0.5191  QPS    4452.9  faults/query 0.00
+    nprobe=12    test: recall 0.5253  QPS    4310.6  faults/query 0.00
+    nprobe=16    tune: recall 0.5347  QPS    3997.0  faults/query 0.00
+    nprobe=16    test: recall 0.5392  QPS    3620.2  faults/query 0.00
+    nprobe=24    tune: recall 0.5527  QPS    3309.8  faults/query 0.00
+    nprobe=24    test: recall 0.5567  QPS    3018.2  faults/query 0.00
+    nprobe=32    tune: recall 0.5648  QPS    2555.7  faults/query 0.00
+    nprobe=32    test: recall 0.5665  QPS    2450.1  faults/query 0.00
+    nprobe=48    tune: recall 0.5790  QPS    1616.2  faults/query 0.00
+    nprobe=48    test: recall 0.5809  QPS    1785.1  faults/query 0.00
+    nprobe=64    tune: recall 0.5877  QPS    1531.8  faults/query 0.00
+    nprobe=64    test: recall 0.5885  QPS    1500.0  faults/query 0.00
+    nprobe=96    tune: recall 0.5981  QPS     719.6  faults/query 0.00
+    nprobe=96    test: recall 0.5984  QPS     903.2  faults/query 0.00
+    nprobe=128   tune: recall 0.6039  QPS     713.4  faults/query 0.00
+    nprobe=128   test: recall 0.6040  QPS     745.6  faults/query 0.00
+    nprobe=192   tune: recall 0.6113  QPS     492.3  faults/query 0.00
+    nprobe=192   test: recall 0.6115  QPS     514.0  faults/query 0.00
+    nprobe=256   tune: recall 0.6153  QPS     413.1  faults/query 0.00
+    nprobe=256   test: recall 0.6158  QPS     388.4  faults/query 0.00
+    nprobe=384   tune: recall 0.6198  QPS     278.2  faults/query 0.00
+    nprobe=384   test: recall 0.6197  QPS     279.9  faults/query 0.00
+    nprobe=512   tune: recall 0.6223  QPS     211.2  faults/query 0.00
+    nprobe=512   test: recall 0.6219  QPS     191.8  faults/query 0.00
+[part2] glove IVF-PQ nlist=4096,m=50,nbits=8: build 448.0s, 67.2 MiB (process RSS 824 MiB)
+    nprobe=1     tune: recall 0.3175  QPS    3693.9  faults/query 0.00
+    nprobe=1     test: recall 0.3267  QPS    4713.3  faults/query 0.00
+    nprobe=2     tune: recall 0.4257  QPS    3649.5  faults/query 0.00
+    nprobe=2     test: recall 0.4330  QPS    4960.7  faults/query 0.00
+    nprobe=4     tune: recall 0.5248  QPS    3328.5  faults/query 0.00
+    nprobe=4     test: recall 0.5316  QPS    4237.6  faults/query 0.00
+    nprobe=8     tune: recall 0.6083  QPS    1945.4  faults/query 0.00
+    nprobe=8     test: recall 0.6151  QPS    2507.1  faults/query 0.00
+    nprobe=12    tune: recall 0.6485  QPS    2174.5  faults/query 0.00
+    nprobe=12    test: recall 0.6553  QPS    2302.5  faults/query 0.00
+    nprobe=16    tune: recall 0.6749  QPS    1075.5  faults/query 0.00
+    nprobe=16    test: recall 0.6811  QPS    1310.9  faults/query 0.00
+    nprobe=24    tune: recall 0.7076  QPS    1275.2  faults/query 0.00
+    nprobe=24    test: recall 0.7132  QPS     983.3  faults/query 0.01
+    nprobe=32    tune: recall 0.7302  QPS    1266.2  faults/query 0.10
+    nprobe=32    test: recall 0.7332  QPS    1527.6  faults/query 0.00
+    nprobe=48    tune: recall 0.7579  QPS    1112.9  faults/query 0.00
+    nprobe=48    test: recall 0.7619  QPS    1107.9  faults/query 0.00
+    nprobe=64    tune: recall 0.7755  QPS     850.7  faults/query 0.00
+    nprobe=64    test: recall 0.7785  QPS     906.3  faults/query 0.00
+    nprobe=96    tune: recall 0.7978  QPS     582.5  faults/query 0.00
+    nprobe=96    test: recall 0.8007  QPS     623.3  faults/query 0.00
+    nprobe=128   tune: recall 0.8120  QPS     470.1  faults/query 0.00
+    nprobe=128   test: recall 0.8133  QPS     479.4  faults/query 0.00
+    nprobe=192   tune: recall 0.8299  QPS     311.0  faults/query 0.00
+    nprobe=192   test: recall 0.8314  QPS     326.7  faults/query 0.00
+    nprobe=256   tune: recall 0.8405  QPS     243.7  faults/query 0.11
+    nprobe=256   test: recall 0.8426  QPS     263.3  faults/query 0.00
+    nprobe=384   tune: recall 0.8520  QPS     177.4  faults/query 0.01
+    nprobe=384   test: recall 0.8534  QPS     181.1  faults/query 0.00
+    nprobe=512   tune: recall 0.8584  QPS     134.8  faults/query 0.00
+    nprobe=512   test: recall 0.8602  QPS     136.3  faults/query 0.00
+[part2] glove IVF-Flat nlist=8192: build 645.5s, 463.7 MiB (process RSS 1108 MiB)
+    nprobe=1     tune: recall 0.2907  QPS    3284.5  faults/query 0.02
+    nprobe=1     test: recall 0.3030  QPS    3490.2  faults/query 0.04
+    nprobe=2     tune: recall 0.3983  QPS    3614.7  faults/query 0.00
+    nprobe=2     test: recall 0.4069  QPS    3342.3  faults/query 0.00
+    nprobe=4     tune: recall 0.5010  QPS    3234.3  faults/query 0.04
+    nprobe=4     test: recall 0.5102  QPS    3490.3  faults/query 0.01
+    nprobe=8     tune: recall 0.5956  QPS    2562.4  faults/query 0.05
+    nprobe=8     test: recall 0.6030  QPS    2892.5  faults/query 0.01
+    nprobe=12    tune: recall 0.6437  QPS    2296.4  faults/query 0.02
+    nprobe=12    test: recall 0.6496  QPS    2810.1  faults/query 0.00
+    nprobe=16    tune: recall 0.6764  QPS    3395.2  faults/query 0.01
+    nprobe=16    test: recall 0.6820  QPS    2803.8  faults/query 0.00
+    nprobe=24    tune: recall 0.7192  QPS    2291.5  faults/query 0.00
+    nprobe=24    test: recall 0.7244  QPS    2623.6  faults/query 0.00
+    nprobe=32    tune: recall 0.7466  QPS    2640.2  faults/query 0.00
+    nprobe=32    test: recall 0.7514  QPS    1911.6  faults/query 0.00
+    nprobe=48    tune: recall 0.7840  QPS    1686.9  faults/query 0.00
+    nprobe=48    test: recall 0.7863  QPS    1822.6  faults/query 0.00
+    nprobe=64    tune: recall 0.8084  QPS    1436.5  faults/query 0.00
+    nprobe=64    test: recall 0.8100  QPS    1480.6  faults/query 0.00
+    nprobe=96    tune: recall 0.8393  QPS    1119.4  faults/query 0.00
+    nprobe=96    test: recall 0.8413  QPS    1141.6  faults/query 0.00
+    nprobe=128   tune: recall 0.8607  QPS     915.7  faults/query 0.00
+    nprobe=128   test: recall 0.8619  QPS     929.8  faults/query 0.00
+    nprobe=192   tune: recall 0.8877  QPS     584.2  faults/query 0.00
+    nprobe=192   test: recall 0.8898  QPS     618.4  faults/query 0.00
+    nprobe=256   tune: recall 0.9048  QPS     551.7  faults/query 0.00
+    nprobe=256   test: recall 0.9079  QPS     527.2  faults/query 0.00
+    nprobe=384   tune: recall 0.9282  QPS     373.3  faults/query 0.00
+    nprobe=384   test: recall 0.9309  QPS     343.0  faults/query 0.00
+    nprobe=512   tune: recall 0.9439  QPS     261.4  faults/query 0.00
+    nprobe=512   test: recall 0.9446  QPS     260.9  faults/query 0.00
+[part2] glove done in 123.0 min
+
+=== [23:56:13] Parts 1-2: figures, tables, operating points
+[analyze] wrote figures and tables to D:\Documents\IRE\Assignments\IRE-Assignment-3\results
+
+=== [23:56:18] Part 3: query difficulty on GloVe
+[part3] RC tuning quartile edges: [1.3698 1.4447 1.5741]; test bin sizes [1203 1281 1259 1257]
+[part3] done: {"p3_rc_edge1": 1.3698, "p3_rc_edge2": 1.4447, "p3_rc_edge3": 1.5741, "p3_rc_min": 1.2766, "p3_rc_median": 1.4449, "p3_rc_max": 7.0381, "p3_hnsw_q1_recall": 0.8397, "p3_hnsw_q1_lat_ms": 2.2366, "p3_hnsw_q1_frac_below_08": 0.2502, "p3_hnsw_q2_recall": 0.9742, "p3_hnsw_q2_lat_ms": 2.021, "p3_hnsw_q2_frac_below_08": 0.0086, "p3_hnsw_q3_recall": 0.9971, "p3_hnsw_q3_lat_ms": 1.76, "p3_hnsw_q3_frac_below_08": 0.0, "p3_hnsw_q4_recall": 1.0, "p3_hnsw_q4_lat_ms": 1.4078, "p3_hnsw_q4_frac_below_08": 0.0, "p3_hnsw_overall": 0.9541, "p3_hnsw_spearman": 0.6378, "p3_hnsw_spearman_lat": -0.8291, "p3_hnsw_need_q1": null, "p3_hnsw_need_q2": 256, "p3_hnsw_need_q3": 64, "p3_hnsw_need_q4": 24, "p3_ivfflat_q1_recall": 0.8415, "p3_ivfflat_q1_lat_ms": 4.5213, "p3_ivfflat_q1_frac_below_08": 0.2452, "p3_ivfflat_q2_recall": 0.9703, "p3_ivfflat_q2_lat_ms": 4.8358, "p3_ivfflat_q2_frac_below_08": 0.0164, "p3_ivfflat_q3_recall": 0.995, "p3_ivfflat_q3_lat_ms": 4.9961, "p3_ivfflat_q3_frac_below_08": 0.0, "p3_ivfflat_q4_recall": 0.9991, "p3_ivfflat_q4_lat_ms": 5.0764, "p3_ivfflat_q4_frac_below_08": 0.0008, "p3_ivfflat_overall": 0.9528, "p3_ivfflat_spearman": 0.6238, "p3_ivfflat_spearman_lat": 0.2521, "p3_ivfflat_need_q1": null, "p3_ivfflat_need_q2": 256, "p3_ivfflat_need_q3": 64, "p3_ivfflat_need_q4": 16, "p3_ivfpq_q1_recall": 0.7672, "p3_ivfpq_q1_lat_ms": 6.961, "p3_ivfpq_q1_frac_below_08": 0.409, "p3_ivfpq_q2_recall": 0.8526, "p3_ivfpq_q2_lat_ms": 7.2288, "p3_ivfpq_q2_frac_below_08": 0.1257, "p3_ivfpq_q3_recall": 0.8928, "p3_ivfpq_q3_lat_ms": 7.3602, "p3_ivfpq_q3_frac_below_08": 0.0429, "p3_ivfpq_q4_recall": 0.9244, "p3_ivfpq_q4_lat_ms": 7.4805, "p3_ivfpq_q4_frac_below_08": 0.0175, "p3_ivfpq_overall": 0.8602, "p3_ivfpq_spearman": 0.5308, "p3_ivfpq_spearman_lat": 0.4128, "p3_ivfpq_need_q1": null, "p3_ivfpq_need_q2": null, "p3_ivfpq_need_q3": null, "p3_ivfpq_need_q4": null}
+
+=== [23:58:33] Part 4: drift experiment on synthetic data
+[part4] CPU calibration: 444 QPS
+[part4] delta=0.0: R=8.48, shift=0.00, share of true neighbours that are new vectors 0.500
+[part4] fixed efSearch for HNSW: 24
+    stale   HNSW     fixed efSearch=24: recall 0.8953 QPS    13344 dist/query       362 | needed for 0.95: not reached {}
+[part4] fixed nprobe for IVF-Flat: 8
+    stale   IVF-Flat fixed nprobe=8: recall 0.9944 QPS     9351 dist/query      3256 | needed for 0.95: 8 {'max_list_size': 742, 'list_imbalance': 1.048701696}
+[part4] fixed nprobe for IVF-PQ: 8
+    stale   IVF-PQ   fixed nprobe=8: recall 0.7873 QPS     6526 dist/query      3256 | needed for 0.95: not reached {'max_list_size': 742, 'list_imbalance': 1.048701696, 'pq_rel_error': 0.4651796519756317}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9896 QPS    10398 dist/query       374 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9934 QPS     6191 dist/query      3264 | needed for 0.95: 8 {'max_list_size': 682, 'list_imbalance': 1.0546791808}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.7944 QPS     6982 dist/query      3264 | needed for 0.95: not reached {'max_list_size': 682, 'list_imbalance': 1.0546791808, 'pq_rel_error': 0.4589366614818573}
+[part4] delta=0.25: R=8.48, shift=2.12, share of true neighbours that are new vectors 0.999
+    stale   HNSW     fixed efSearch=24: recall 0.9539 QPS    16210 dist/query       360 | needed for 0.95: 32 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9902 QPS     6649 dist/query      3445 | needed for 0.95: 8 {'max_list_size': 1137, 'list_imbalance': 1.1124787456}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.7312 QPS     7371 dist/query      3445 | needed for 0.95: not reached {'max_list_size': 1137, 'list_imbalance': 1.1124787456, 'pq_rel_error': 0.6200265884399414}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9848 QPS     9537 dist/query       366 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9963 QPS     6669 dist/query      3258 | needed for 0.95: 8 {'max_list_size': 728, 'list_imbalance': 1.0626697088}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8016 QPS     6230 dist/query      3258 | needed for 0.95: not reached {'max_list_size': 728, 'list_imbalance': 1.0626697088, 'pq_rel_error': 0.45292720198631287}
+[part4] delta=0.5: R=8.48, shift=4.24, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9627 QPS    23255 dist/query       350 | needed for 0.95: 24 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9902 QPS     7500 dist/query      3876 | needed for 0.95: 8 {'max_list_size': 1767, 'list_imbalance': 1.3079837696}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.5509 QPS     5809 dist/query      3876 | needed for 0.95: not reached {'max_list_size': 1767, 'list_imbalance': 1.3079837696, 'pq_rel_error': 1.274911642074585}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9779 QPS    12373 dist/query       356 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9987 QPS     7741 dist/query      3305 | needed for 0.95: 4 {'max_list_size': 996, 'list_imbalance': 1.114380608}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8016 QPS     5986 dist/query      3305 | needed for 0.95: not reached {'max_list_size': 996, 'list_imbalance': 1.114380608, 'pq_rel_error': 0.4553055763244629}
+[part4] delta=1.0: R=8.48, shift=8.48, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9419 QPS    14175 dist/query       345 | needed for 0.95: not reached {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9967 QPS     5909 dist/query      4835 | needed for 0.95: 4 {'max_list_size': 3195, 'list_imbalance': 2.025347136}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.3504 QPS     6887 dist/query      4835 | needed for 0.95: not reached {'max_list_size': 3195, 'list_imbalance': 2.025347136, 'pq_rel_error': 3.336270809173584}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9819 QPS    18309 dist/query       353 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9989 QPS    11212 dist/query      3300 | needed for 0.95: 4 {'max_list_size': 1002, 'list_imbalance': 1.1143740544}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8054 QPS     9392 dist/query      3300 | needed for 0.95: not reached {'max_list_size': 1002, 'list_imbalance': 1.1143740544, 'pq_rel_error': 0.45497286319732666}
+[part4] delta=2.0: R=8.48, shift=16.96, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9917 QPS    23878 dist/query       353 | needed for 0.95: 10 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9992 QPS     1118 dist/query      9394 | needed for 0.95: 4 {'max_list_size': 21937, 'list_imbalance': 6.2007500032}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.1767 QPS     5481 dist/query      9394 | needed for 0.95: not reached {'max_list_size': 21937, 'list_imbalance': 6.2007500032, 'pq_rel_error': 8.0772705078125}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9861 QPS    23743 dist/query       355 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9990 QPS    11268 dist/query      3306 | needed for 0.95: 4 {'max_list_size': 1002, 'list_imbalance': 1.114332992}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8017 QPS    10152 dist/query      3306 | needed for 0.95: not reached {'max_list_size': 1002, 'list_imbalance': 1.114332992, 'pq_rel_error': 0.4550343453884125}
+
+=== [00:13:27] results.csv and environment
+[collect] 688 rows -> D:\Documents\IRE\Assignments\IRE-Assignment-3\results\results.csv
+[collect] CPU calibration over 5 scripts: 414-498 QPS; max page faults per timed query 0.957
+
+=== [00:13:30] report
+[report] D:\Documents\IRE\Assignments\IRE-Assignment-3\report.pdf (4 pages)
+
+=== [00:13:37] done in 199 min

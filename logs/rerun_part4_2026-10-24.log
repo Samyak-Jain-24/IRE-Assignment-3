@@ -1,0 +1,55 @@
+=== [00:16:48] part4_drift.py
+[part4] CPU calibration: 509 QPS
+[part4] delta=0.0: R=8.48, shift=0.00, share of true neighbours that are new vectors 0.500
+[part4] fixed efSearch for HNSW: 24
+    stale   HNSW     fixed efSearch=24: recall 0.9161 QPS    22317 dist/query       366 | needed for 0.95: not reached {}
+[part4] fixed nprobe for IVF-Flat: 8
+    stale   IVF-Flat fixed nprobe=8: recall 0.9944 QPS    11075 dist/query      3257 | needed for 0.95: 8 {'max_list_size': 742, 'list_imbalance': 1.048701696}
+[part4] fixed nprobe for IVF-PQ: 8
+    stale   IVF-PQ   fixed nprobe=8: recall 0.7873 QPS     9887 dist/query      3257 | needed for 0.95: not reached {'max_list_size': 742, 'list_imbalance': 1.048701696, 'pq_rel_error': 0.4651796519756317}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9867 QPS    15789 dist/query       374 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9934 QPS    10788 dist/query      3265 | needed for 0.95: 8 {'max_list_size': 682, 'list_imbalance': 1.0546791808}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.7944 QPS    10051 dist/query      3265 | needed for 0.95: not reached {'max_list_size': 682, 'list_imbalance': 1.0546791808, 'pq_rel_error': 0.4589366614818573}
+[part4] delta=0.25: R=8.48, shift=2.12, share of true neighbours that are new vectors 0.999
+    stale   HNSW     fixed efSearch=24: recall 0.9609 QPS    23181 dist/query       359 | needed for 0.95: 16 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9902 QPS    10826 dist/query      3446 | needed for 0.95: 8 {'max_list_size': 1137, 'list_imbalance': 1.1124787456}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.7312 QPS     9967 dist/query      3446 | needed for 0.95: not reached {'max_list_size': 1137, 'list_imbalance': 1.1124787456, 'pq_rel_error': 0.6200265884399414}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9872 QPS    16151 dist/query       366 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9963 QPS    11110 dist/query      3259 | needed for 0.95: 8 {'max_list_size': 728, 'list_imbalance': 1.0626697088}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8016 QPS     8736 dist/query      3259 | needed for 0.95: not reached {'max_list_size': 728, 'list_imbalance': 1.0626697088, 'pq_rel_error': 0.45292720198631287}
+[part4] delta=0.5: R=8.48, shift=4.24, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9613 QPS    23121 dist/query       351 | needed for 0.95: 16 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9902 QPS     9530 dist/query      3876 | needed for 0.95: 8 {'max_list_size': 1767, 'list_imbalance': 1.3079837696}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.5509 QPS    10321 dist/query      3876 | needed for 0.95: not reached {'max_list_size': 1767, 'list_imbalance': 1.3079837696, 'pq_rel_error': 1.274911642074585}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9868 QPS    13987 dist/query       357 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9987 QPS    10217 dist/query      3309 | needed for 0.95: 4 {'max_list_size': 996, 'list_imbalance': 1.114380608}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8016 QPS    10470 dist/query      3309 | needed for 0.95: not reached {'max_list_size': 996, 'list_imbalance': 1.114380608, 'pq_rel_error': 0.4553055763244629}
+[part4] delta=1.0: R=8.48, shift=8.48, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9236 QPS    24948 dist/query       342 | needed for 0.95: not reached {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9967 QPS     8128 dist/query      4835 | needed for 0.95: 4 {'max_list_size': 3195, 'list_imbalance': 2.025347136}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.3504 QPS     8295 dist/query      4835 | needed for 0.95: not reached {'max_list_size': 3195, 'list_imbalance': 2.025347136, 'pq_rel_error': 3.336270809173584}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9840 QPS    22719 dist/query       354 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9989 QPS    11438 dist/query      3304 | needed for 0.95: 4 {'max_list_size': 1002, 'list_imbalance': 1.1143740544}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8054 QPS    11223 dist/query      3304 | needed for 0.95: not reached {'max_list_size': 1002, 'list_imbalance': 1.1143740544, 'pq_rel_error': 0.45497286319732666}
+[part4] delta=2.0: R=8.48, shift=16.96, share of true neighbours that are new vectors 1.000
+    stale   HNSW     fixed efSearch=24: recall 0.9894 QPS    24772 dist/query       350 | needed for 0.95: 10 {}
+    stale   IVF-Flat fixed nprobe=8: recall 0.9992 QPS     4685 dist/query      9410 | needed for 0.95: 4 {'max_list_size': 21937, 'list_imbalance': 6.2007500032}
+    stale   IVF-PQ   fixed nprobe=8: recall 0.1767 QPS     5331 dist/query      9410 | needed for 0.95: not reached {'max_list_size': 21937, 'list_imbalance': 6.2007500032, 'pq_rel_error': 8.0772705078125}
+    rebuilt HNSW     fixed efSearch=24: recall 0.9906 QPS    16736 dist/query       354 | needed for 0.95: 16 {}
+    rebuilt IVF-Flat fixed nprobe=8: recall 0.9990 QPS    10509 dist/query      3309 | needed for 0.95: 4 {'max_list_size': 1002, 'list_imbalance': 1.114332992}
+    rebuilt IVF-PQ   fixed nprobe=8: recall 0.8017 QPS     9136 dist/query      3309 | needed for 0.95: not reached {'max_list_size': 1002, 'list_imbalance': 1.114332992, 'pq_rel_error': 0.4550343453884125}
+=== [00:29:13] part4_hnsw_order.py
+[part4-order] {'Build': 'two-batch, 8 threads', 'Build time (s)': '13', 'orphans, old (%)': '0.00', 'orphans, new (%)': '0.00', 'median in-degree old / new': '19 / 12', 'recall ef=24': '0.908', 'recall ef=64': '0.912', 'recall ef=256': '0.914', 'recall ef=1024': '0.919', 'missed neighbours that are old (%)': '50'}
+[part4-order] {'Build': 'two-batch, 1 thread', 'Build time (s)': '45', 'orphans, old (%)': '0.00', 'orphans, new (%)': '0.00', 'median in-degree old / new': '19 / 12', 'recall ef=24': '0.913', 'recall ef=64': '0.919', 'recall ef=256': '0.921', 'recall ef=1024': '0.938', 'missed neighbours that are old (%)': '43'}
+[part4-order] {'Build': 'one pass, 8 threads', 'Build time (s)': '13', 'orphans, old (%)': '0.00', 'orphans, new (%)': '0.00', 'median in-degree old / new': '15 / 15', 'recall ef=24': '0.991', 'recall ef=64': '0.997', 'recall ef=256': '0.998', 'recall ef=1024': '0.998', 'missed neighbours that are old (%)': '52'}
+=== [00:30:34] analyze_benchmarks.py
+[analyze] wrote figures and tables to D:\Documents\IRE\Assignments\IRE-Assignment-3\results
+=== [00:30:37] part3_difficulty.py
+[part3] RC tuning quartile edges: [1.3698 1.4447 1.5741]; test bin sizes [1203 1281 1259 1257]
+[part3] done: {"p3_rc_edge1": 1.3698, "p3_rc_edge2": 1.4447, "p3_rc_edge3": 1.5741, "p3_rc_min": 1.2766, "p3_rc_median": 1.4449, "p3_rc_max": 7.0381, "p3_hnsw_q1_recall": 0.8397, "p3_hnsw_q1_lat_ms": 2.2366, "p3_hnsw_q1_frac_below_08": 0.2502, "p3_hnsw_q2_recall": 0.9742, "p3_hnsw_q2_lat_ms": 2.021, "p3_hnsw_q2_frac_below_08": 0.0086, "p3_hnsw_q3_recall": 0.9971, "p3_hnsw_q3_lat_ms": 1.76, "p3_hnsw_q3_frac_below_08": 0.0, "p3_hnsw_q4_recall": 1.0, "p3_hnsw_q4_lat_ms": 1.4078, "p3_hnsw_q4_frac_below_08": 0.0, "p3_hnsw_overall": 0.9541, "p3_hnsw_spearman": 0.6378, "p3_hnsw_spearman_lat": -0.8291, "p3_hnsw_need_q1": null, "p3_hnsw_need_q2": 256, "p3_hnsw_need_q3": 64, "p3_hnsw_need_q4": 24, "p3_ivfflat_q1_recall": 0.8415, "p3_ivfflat_q1_lat_ms": 4.5213, "p3_ivfflat_q1_frac_below_08": 0.2452, "p3_ivfflat_q2_recall": 0.9703, "p3_ivfflat_q2_lat_ms": 4.8358, "p3_ivfflat_q2_frac_below_08": 0.0164, "p3_ivfflat_q3_recall": 0.995, "p3_ivfflat_q3_lat_ms": 4.9961, "p3_ivfflat_q3_frac_below_08": 0.0, "p3_ivfflat_q4_recall": 0.9991, "p3_ivfflat_q4_lat_ms": 5.0764, "p3_ivfflat_q4_frac_below_08": 0.0008, "p3_ivfflat_overall": 0.9528, "p3_ivfflat_spearman": 0.6238, "p3_ivfflat_spearman_lat": 0.2521, "p3_ivfflat_need_q1": null, "p3_ivfflat_need_q2": 256, "p3_ivfflat_need_q3": 64, "p3_ivfflat_need_q4": 16, "p3_ivfpq_q1_recall": 0.7672, "p3_ivfpq_q1_lat_ms": 6.961, "p3_ivfpq_q1_frac_below_08": 0.409, "p3_ivfpq_q2_recall": 0.8526, "p3_ivfpq_q2_lat_ms": 7.2288, "p3_ivfpq_q2_frac_below_08": 0.1257, "p3_ivfpq_q3_recall": 0.8928, "p3_ivfpq_q3_lat_ms": 7.3602, "p3_ivfpq_q3_frac_below_08": 0.0429, "p3_ivfpq_q4_recall": 0.9244, "p3_ivfpq_q4_lat_ms": 7.4805, "p3_ivfpq_q4_frac_below_08": 0.0175, "p3_ivfpq_overall": 0.8602, "p3_ivfpq_spearman": 0.5308, "p3_ivfpq_spearman_lat": 0.4128, "p3_ivfpq_need_q1": null, "p3_ivfpq_need_q2": null, "p3_ivfpq_need_q3": null, "p3_ivfpq_need_q4": null, "p3_sift_rc_median": 2.3785, "p3_sift_rc_p25": 2.1257, "p3_glove_test_rc_median": 1.4451, "p3_glove_test_rc_p25": 1.3728}
+=== [00:33:23] collect_results.py
+[collect] 702 rows -> D:\Documents\IRE\Assignments\IRE-Assignment-3\results\results.csv
+[collect] CPU calibration over 5 scripts: 414-509 QPS; max page faults per timed query 0.957
+=== [00:33:26] build_report.py
+[report] D:\Documents\IRE\Assignments\IRE-Assignment-3\report.pdf (4 pages)
+=== [00:33:31] rerun done

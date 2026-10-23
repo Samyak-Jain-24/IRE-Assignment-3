@@ -85,6 +85,22 @@ Add `--quick` to any step to work on the quick subset.
   centroid, seed 1234). IVF-Flat and IVF-PQ with the same `nlist` share one quantizer, and its
   training time is charged to both.
 
+## Provenance of the submitted numbers
+
+* `logs/full_run_2026-10-23.log`: `ANN_REQUIRE_AC=1 bash run_all.sh` (Parts 1-4, about 3.3 h,
+  including a pause while the laptop was on battery).
+* `logs/rerun_part4_2026-10-24.log`: Part 4, the HNSW insertion-order diagnostic, the analysis,
+  Part 3, collection and the report were run again with the final code. The reason: Part 4's
+  timed passes are short (about 0.1 s), and one of them was hit by a transient slowdown (it
+  read 8x slower, but timed in isolation it was 2.4x). Part 4 now takes the median of 7
+  passes. Part 3 was rerun only to add SIFT's relative contrast as a reference; it reuses Part
+  2's per-query results, so its other numbers are unchanged. The diagnostic was then run once
+  more after its table columns were refined, followed by `collect_results.py` and
+  `build_report.py`.
+* The Part 3 and Part 4 hypotheses were committed before any of this code was written
+  (`git log -- hypothesis.md`). The HNSW insertion-order diagnostic
+  (`scripts/part4_hnsw_order.py`) is a post-hoc follow-up and is labelled as such in the report.
+
 ## Layout
 
 ```
@@ -94,6 +110,7 @@ tests/           pytest unit tests
 report/          report.html template (placeholders are filled from the generated results)
 hypothesis.md    Part 3 and Part 4 hypotheses (committed before those experiments were run)
 run_all.sh       one-command reproduction
+logs/            logs of the runs behind the submitted numbers
 ```
 
 `results/results.csv` has one row per benchmark run, using the schema in `annbench/results.py`.
