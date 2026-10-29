@@ -182,6 +182,9 @@ def main():
                 key = "".join(ch for ch in bp.split(",nbits")[0] if ch.isalnum())
                 numbers[f"p2_{ds}_{short(fam)}_{key}_bpv"] = float(g["bytes_per_vector"].iloc[0])
                 numbers[f"p2_{ds}_{short(fam)}_{key}_build_s"] = float(g["build_time_s"].iloc[0])
+                best = g.loc[g["recall_at_10"].idxmax()]          # best test recall this build reached
+                numbers[f"p2_{ds}_{short(fam)}_{key}_maxrecall"] = float(best["recall_at_10"])
+                numbers[f"p2_{ds}_{short(fam)}_{key}_maxrecall_at"] = int(best["search_value"])
             tag = f"p2_{ds}_{short(fam)}"
             numbers[f"{tag}_gib_10m"] = float(row["bytes_per_vector"]) * 10_000_000 / 2**30
             numbers[f"{tag}_build_s"] = float(row["build_time_s"])
